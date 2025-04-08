@@ -1,6 +1,6 @@
 {
   "name": "com.fallingsnowinteractive.ui",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "displayName": "FSI Ui",
   "description": "Package for a simple ui system.",
   "unity": "2019.1",
@@ -12,5 +12,9 @@
     "name": "Kira Dinan",
     "email": "kiradinan.dev@gmail.com"
   },
-  "hideInEditor": false
+  "hideInEditor": false,
+  "dependencies": {
+    "com.unity.inputsystem": "1.11.2",
+    "com.unity.localization": "1.5.4"
+  }
 }

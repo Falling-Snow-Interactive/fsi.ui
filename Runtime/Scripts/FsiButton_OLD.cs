@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Fsi.Ui
 {
-    public class FsiButton : MonoBehaviour, IPointerEnterHandler
+    public class FsiButton_OLD : MonoBehaviour, IPointerEnterHandler
     {
         public const string PrefabPath = "Packages/com.fallingsnowinteractive.ui/Runtime/Assets/Prefabs/FSI_Button_UI.prefab";
         
@@ -72,7 +72,7 @@ namespace Fsi.Ui
         }
         
         #region Create
-        
+        #if UNITY_EDITOR
         [MenuItem("GameObject/FSI/Ui/Button")]
         public static void CreateButton()
         {
@@ -81,7 +81,7 @@ namespace Fsi.Ui
             GameObject button = Instantiate(asset, parent.transform);
             button.name = "FSI_Button_UI";
         }
-        
+        #endif
         #endregion
     }
 }
