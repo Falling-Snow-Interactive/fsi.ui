@@ -3,7 +3,9 @@
     "rootNamespace": "Fsi.Ui",
     "references": [
         "GUID:0aede76063b894034a434ed76d1c99ba",
-        "GUID:343deaaf83e0cee4ca978e7df0b80d21"
+        "GUID:343deaaf83e0cee4ca978e7df0b80d21",
+        "GUID:b279ef79bd3444b31bb52d6547177e82",
+        "GUID:0a0ec71ae2d72451482f5b56a8255ed4"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,58 +1,89 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using Fsi.Ui.Scripts.Inputs.Settings;
+using Fsi.Ui.Scripts.Inputs.Ui;
 using Fsi.Ui.Scripts.Ui.ColorPalettes;
-using JetBrains.Annotations;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Button = UnityEngine.UI.Button;
+using Object = UnityEngine.Object;
 
 namespace Fsi.Ui.Scripts.Ui.Buttons
 {
-    public class FsiButton : MonoBehaviour //, 
-                                // ISelectHandler, 
-                                // IPointerEnterHandler, 
-                                // IDeselectHandler
+    public class FsiButton : MonoBehaviour,  
+                             #region Ui Interfaces
+                             
+                             // Button Input Interactions
+                             ISubmitHandler, 
+                             ISelectHandler, 
+                             IDeselectHandler, 
+                             
+                             // Pointer Interactions
+                             IPointerEnterHandler, 
+                             IPointerExitHandler,
+                             IPointerClickHandler
+    
+                             #endregion
     {
-        public event Action<FsiButton> Selected;
-        public event Action<FsiButton> Deselected;
-
-        [Header("Simple Button")]
-
-        [Space(10)]
-        [SerializeField]
-        private UnityEvent onClick;
+        private const string PrefabPath = "Packages/com.fallingsnowinteractive.ui/Assets/Prefabs/Fsi_Button_Ui.prefab";
         
-        [SerializeField]
+        public event Action StatusChanged;
+        
+        [Space(10)]
+        [SerializeField] 
+        private UnityEvent onSubmit;
+        
+        [Header("Simple Button")]
+        
+        [SerializeField] 
         private bool lastSiblingOnSelect = false;
         
         [Header("Status")]
         
-        [SerializeField]
-        private bool isSelected = false;
-        public bool IsSelected => isSelected;
+        [SerializeField] 
+        private bool selected = false;
         
-        [SerializeField]
+        [SerializeField] 
         private bool interactable = false;
-        public bool Interactable => interactable;
+        public bool Interactable
+        {
+            get => interactable;
+            set
+            {
+                interactable = value;
+                if (button)
+                {
+                    button.interactable = value;
+                }
+
+                Refresh();
+            }
+        }
 
         [Header("Colours")]
 
-        [SerializeField]
-        private ColorPalette colorPalette;
+        [SerializeField] private ColorPalette colorPalette;
         private ColorPalette ColorPalette => colorPalette;
-
+        
         [Header("Input")]
+        
+        [SerializeField]
+        protected InputIcon inputIcon;
+        
+        [Header("Shortcut")]
 
         [SerializeField]
-        private bool hasInput;
+        private bool hasShortcut;
 
-        [SerializeField]
-        private InputActionReference inputActionReference;
-        [CanBeNull]
-        private InputAction inputAction;
+        [SerializeField] 
+        private InputActionReference shortcutActionReference;
+        private InputAction shortcutAction;
         
         [Header("References")]
         
@@ -65,105 +96,131 @@ namespace Fsi.Ui.Scripts.Ui.Buttons
         [SerializeField]
         protected Button button;
         public Button Button => button;
-
-        // [SerializeField]
-        // protected InputIcon inputIcon;
+        
+        #region MonoBehavior Events
         
         private void OnValidate()
         {
-            if (button)
+            Interactable = interactable;
+
+            if (inputIcon)
             {
-                button.interactable = interactable;
+                inputIcon.shortcutReference = hasShortcut ? shortcutActionReference : null;
             }
             
-            UpdateColors();
+            Refresh();
         }
 
         protected virtual void Awake()
         {
-            if (hasInput && inputActionReference)
+            if (hasShortcut && shortcutActionReference)
             {
-                inputAction = inputActionReference.ToInputAction();
+                shortcutAction = shortcutActionReference.ToInputAction();
             }
         }
 
         protected virtual void OnEnable()
         {
-            // if (inputIcon)
-            // {
-            //     inputIcon.gameObject.SetActive(IsSelected);
-            // }
-            UpdateColors();
+            Refresh();
 
-            if (hasInput && inputAction != null)
+            if (hasShortcut && shortcutAction != null)
             {
-                inputAction.performed += OnInputActionPerformed;
-                inputAction.Enable();
+                shortcutAction.performed += OnShortcut;
+                shortcutAction.Enable();
             }
+            
+            StatusChanged?.Invoke();
         }
 
         protected virtual void OnDisable()
         {
-            if (hasInput && inputAction != null)
+            if (hasShortcut && shortcutAction != null)
             {
-                inputAction.performed -= OnInputActionPerformed;
-                inputAction.Disable();
+                shortcutAction.performed -= OnShortcut;
+                shortcutAction.Disable();
             }
+            
+            StatusChanged?.Invoke();
         }
+        
+        #endregion
+        
+        #region Shortcut
 
-        private void OnInputActionPerformed(InputAction.CallbackContext callbackContext)
+        private void OnShortcut(InputAction.CallbackContext ctx)
         {
-            OnClick();
+            UiInputSettings.Log("FSI Button: OnShortcut", gameObject);
+            // OnClick();
         }
+        
+        #endregion
 
-        #region Ui Events
+        #region Ui Handers
+        
+        #region Submit
 
-        public virtual void OnClick()
+        public virtual void OnSubmit()
         {
+            UiInputSettings.Log("FSI Button: OnSubmit", gameObject);
             ClickFlash();
-            onClick?.Invoke();
+            onSubmit?.Invoke();
         }
-
-        public virtual void OnSelect()
+        
+        public void OnSubmit(BaseEventData _)
         {
-            isSelected = true;
-            UpdateColors();
-            // if (inputIcon)
-            // {
-            //     inputIcon.gameObject.SetActive(true);
-            // }
+            OnSubmit();
+        }
+        
+        #endregion
+        
+        #region Select
+
+        protected virtual void OnSelect()
+        {
+            UiInputSettings.Log("FSI Button: OnSelect", gameObject);
+            selected = true;
+            Refresh();
 
             if (lastSiblingOnSelect)
             {
                 transform.SetAsLastSibling();
             }
             
-            Selected?.Invoke(this);
+            StatusChanged?.Invoke();
         }
-
+        
         public void OnSelect(BaseEventData _)
         {
             OnSelect();
         }
+        
+        #endregion
+        
+        #region Deselect
 
-        public virtual void OnDeselect()
+        protected virtual void OnDeselect()
         {
-            isSelected = false;
-            UpdateColors();
-            // if (inputIcon)
-            // {
-            //     inputIcon.gameObject.SetActive(false);
-            // }
-            Deselected?.Invoke(this);
+            UiInputSettings.Log("FSI Button: OnDeselect", gameObject);
+            selected = false;
+            if (inputIcon)
+            {
+                inputIcon.gameObject.SetActive(hasShortcut);
+            }
+            Refresh();
         }
 
         public void OnDeselect(BaseEventData _)
         {
             OnDeselect();
         }
+        
+        #endregion
+        
+        #region Pointer Enter
 
-        public virtual void OnPointerEnter()
+        protected virtual void OnPointerEnter()
         {
+            UiInputSettings.Log("FSI Button: OnPointerEnter", gameObject);
             EventSystem.current.SetSelectedGameObject(gameObject);
         }
 
@@ -171,9 +228,14 @@ namespace Fsi.Ui.Scripts.Ui.Buttons
         {
             OnPointerEnter();
         }
+        
+        #endregion
+        
+        #region Pointer Exit
 
-        public virtual void OnPointerExit()
+        protected virtual void OnPointerExit()
         {
+            UiInputSettings.Log("FSI Button: OnPointerExit", gameObject);
             if (EventSystem.current.currentSelectedGameObject == gameObject)
             {
                 EventSystem.current.SetSelectedGameObject(null);
@@ -184,40 +246,21 @@ namespace Fsi.Ui.Scripts.Ui.Buttons
         {
             OnPointerExit();
         }
-
-        private void UpdateColors()
+        
+        #endregion
+        
+        #region Pointer Click
+        
+        public void OnPointerClick(PointerEventData eventData)
         {
-            if (IsSelected)
-            {
-                ApplyColors(ColorPalette.SelectedColors);
-            }
-            else if (!Interactable)
-            {
-                ApplyColors(ColorPalette.DisabledColors);
-            }
-            else
-            {
-                ApplyColors(ColorPalette.NormalColors);
-            }
+            OnSubmit();
         }
+        
+        #endregion
 
-        public void SetInteractable(bool set)
-        {
-            bool back = IsSelected;
-
-            interactable = set;
-            if (button)
-            {
-                button.interactable = set;
-            }
-
-            if (back)
-            {
-                EventSystem.current.SetSelectedGameObject(gameObject);
-            }
-
-            UpdateColors();
-        }
+        #endregion
+        
+        #region Visuals
 
         private void ApplyColors(ButtonColorProperty colors)
         {
@@ -231,47 +274,105 @@ namespace Fsi.Ui.Scripts.Ui.Buttons
                 g.color = colors.Outline;
             }
         }
+
+        private void Refresh()
+        {
+            if (inputIcon)
+            {
+                inputIcon.gameObject.SetActive(selected || hasShortcut);
+            }
+            
+            RefreshColors();
+        }
+        
+        private void RefreshColors()
+        {
+            if (selected)
+            {
+                ApplyColors(ColorPalette.SelectedColors);
+            }
+            else if (!interactable)
+            {
+                ApplyColors(ColorPalette.DisabledColors);
+            }
+            else
+            {
+                ApplyColors(ColorPalette.NormalColors);
+            }
+        }
+        
+        #endregion
         
         #region Animation
 
-        public void ClickFlash()
+        private void ClickFlash()
         {
             Sequence sequence = DOTween.Sequence();
             
             foreach (Graphic bg in backgrounds)
             {
-                Sequence bs = FlashGraphic(bg, ColorPalette.ClickedColors.Background);
+                Sequence bs = FlashGraphic(bg, 
+                                           ColorPalette.ClickedColors.Background, 
+                                           ColorPalette.ClickInTime,
+                                           ColorPalette.ClickWaitTime,
+                                           ColorPalette.ClickOutTime,
+                                           ColorPalette.ClickInEase,
+                                           ColorPalette.ClickOutEase);
                 sequence.Insert(0, bs);
             }
             
             foreach (Graphic outline in outlines)
             {
-                Sequence os = FlashGraphic(outline, ColorPalette.ClickedColors.Outline);
+                Sequence os = FlashGraphic(outline, 
+                                           ColorPalette.ClickedColors.Outline,
+                                           ColorPalette.ClickInTime,
+                                           ColorPalette.ClickWaitTime,
+                                           ColorPalette.ClickOutTime,
+                                           ColorPalette.ClickInEase,
+                                           ColorPalette.ClickOutEase);
                 sequence.Insert(0, os);
             }
             
-            sequence.OnComplete(UpdateColors);
+            sequence.OnComplete(Refresh);
             
             sequence.Play();
         }
         
-        private Sequence FlashGraphic(Graphic g, Color color)
+        private Sequence FlashGraphic(Graphic g, Color color, float inTime, float waitTime, float outTime, Ease inEase, Ease outEase)
         {
             Sequence sequence = DOTween.Sequence();
             
             Color start = g.color;
                 
-            Tween s0 = g.DOColor(color, 0.05f);
-            Tween s1 = g.DOColor(start, 0.05f);
+            Tween s0 = g.DOColor(color, inTime)
+                        .SetEase(inEase);
+            Tween s1 = g.DOColor(start, outTime)
+                        .SetEase(outEase);
             
             sequence.Append(s0);
+            sequence.AppendInterval(waitTime);
             sequence.Append(s1);
 
             return sequence;
         }
         
         #endregion
-
+        
+        #region Create
+        
+        #if UNITY_EDITOR
+        
+        [MenuItem("GameObject/FSI/Ui/Button")]
+        public static void CreateButton()
+        {
+            GameObject parent = Selection.activeGameObject;
+            GameObject asset = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
+            Object button = PrefabUtility.InstantiatePrefab(asset.gameObject, parent.transform);
+            button.name = "FSI_Button_UI";
+        }
+        
+        #endif
+        
         #endregion
     }
 }

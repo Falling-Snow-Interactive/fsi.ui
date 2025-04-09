@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Fsi.Ui
+namespace Fsi.Ui.OLD
 {
     public class FsiButton_OLD : MonoBehaviour, IPointerEnterHandler
     {
@@ -71,17 +71,17 @@ namespace Fsi.Ui
             EventSystem.current.SetSelectedGameObject(gameObject);
         }
         
-        #region Create
-        #if UNITY_EDITOR
-        [MenuItem("GameObject/FSI/Ui/Button")]
-        public static void CreateButton()
-        {
-            GameObject parent = Selection.activeGameObject;
-            GameObject asset = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
-            GameObject button = Instantiate(asset, parent.transform);
-            button.name = "FSI_Button_UI";
-        }
-        #endif
-        #endregion
+        // #region Create
+        // #if UNITY_EDITOR
+        // [MenuItem("GameObject/FSI/Ui/Button")]
+        // public static void CreateButton()
+        // {
+        //     GameObject parent = Selection.activeGameObject;
+        //     GameObject asset = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
+        //     GameObject button = Instantiate(asset, parent.transform);
+        //     button.name = "FSI_Button_UI";
+        // }
+        // #endif
+        // #endregion
     }
 }
