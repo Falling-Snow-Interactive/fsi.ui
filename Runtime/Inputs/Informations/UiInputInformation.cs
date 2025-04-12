@@ -3,7 +3,7 @@ using fsi.settings.Informations;
 using UnityEngine;
 using UnityEngine.InputSystem.Layouts;
 
-namespace Fsi.Ui.Scripts.Inputs.Informations
+namespace Fsi.Ui.Inputs.Informations
 {
     [Serializable]
     public class UiInputInformation : Information<string>

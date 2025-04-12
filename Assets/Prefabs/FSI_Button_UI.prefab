@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1215401898, guid: 728998d83be9a453fa90641342d65972, type: 3}
+  m_Sprite: {fileID: -217133673, guid: 0d4c7ad2258774883a97dc112da5a6d3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -330,7 +330,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6511759323689193632}
   - component: {fileID: 7842639630818267282}
-  - component: {fileID: 8214811540717176080}
   m_Layer: 0
   m_Name: Fsi_Button_Ui
   m_TagString: Untagged
@@ -404,52 +403,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &8214811540717176080
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2894767392044211490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6c47020fa2dc40f78b76e4f38a70460, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  lastSiblingOnSelect: 0
-  selected: 0
-  interactable: 1
-  colorPalette:
-    normalColors:
-      background: {r: 1, g: 1, b: 1, a: 1}
-      outline: {r: 0, g: 0, b: 0, a: 1}
-    selectedColors:
-      background: {r: 0.85, g: 1, b: 0.99693877, a: 1}
-      outline: {r: 0, g: 0.3, b: 0.29454547, a: 1}
-    disabledColors:
-      background: {r: 1, g: 0.75, b: 0.75, a: 1}
-      outline: {r: 0.3, g: 0, b: 0, a: 1}
-    clickedColors:
-      background: {r: 0, g: 1, b: 0.98039216, a: 1}
-      outline: {r: 0, g: 1, b: 0.98039216, a: 1}
-    clickInTime: 0.05
-    clickWaitTime: 0
-    clickOutTime: 0.05
-    clickInEase: 1
-    clickOutEase: 1
-  inputIcon: {fileID: 8484472458555042938}
-  hasShortcut: 0
-  shortcutActionReference: {fileID: 0}
-  backgrounds:
-  - {fileID: 6398186729628624266}
-  - {fileID: 2568179101430960414}
-  outlines:
-  - {fileID: 1288093988980265372}
-  - {fileID: 7865143765437919127}
-  button: {fileID: 7842639630818267282}
 --- !u!1 &3834934728658092567
 GameObject:
   m_ObjectHideFlags: 0
@@ -577,7 +530,7 @@ MonoBehaviour:
   icon: {fileID: 2109213523090169481}
   selectReference: {fileID: 392368643174621059, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   shortcutReference: {fileID: 0}
-  type: 4
+  type: 1
 --- !u!1 &5854773947164913151
 GameObject:
   m_ObjectHideFlags: 0

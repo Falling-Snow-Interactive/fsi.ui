@@ -1,35 +1,23 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
-using Fsi.Ui.Scripts.Inputs.Settings;
-using Fsi.Ui.Scripts.Inputs.Ui;
-using Fsi.Ui.Scripts.Ui.ColorPalettes;
+using Fsi.Ui.ColorPalettes;
+using Fsi.Ui.Inputs.Settings;
+using Fsi.Ui.Inputs.Ui;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 using Object = UnityEngine.Object;
 
-namespace Fsi.Ui.Scripts.Ui.Buttons
+namespace Fsi.Ui.Buttons
 {
-    public class FsiButton : MonoBehaviour,  
-                             #region Ui Interfaces
-                             
-                             // Button Input Interactions
-                             ISubmitHandler, 
-                             ISelectHandler, 
-                             IDeselectHandler, 
-                             
-                             // Pointer Interactions
-                             IPointerEnterHandler, 
-                             IPointerExitHandler,
-                             IPointerClickHandler
-    
-                             #endregion
+    public abstract class FsiButton : MonoBehaviour, 
+                                      ISubmitHandler, ISelectHandler, IDeselectHandler, // Input
+                                      IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler // Pointer
     {
         private const string PrefabPath = "Packages/com.fallingsnowinteractive.ui/Assets/Prefabs/Fsi_Button_Ui.prefab";
         
@@ -42,12 +30,8 @@ namespace Fsi.Ui.Scripts.Ui.Buttons
         [Header("Simple Button")]
         
         [SerializeField] 
-        private bool lastSiblingOnSelect = false;
-        
-        [Header("Status")]
-        
-        [SerializeField] 
         private bool selected = false;
+        public bool Selected => selected;
         
         [SerializeField] 
         private bool interactable = false;
@@ -68,7 +52,8 @@ namespace Fsi.Ui.Scripts.Ui.Buttons
 
         [Header("Colours")]
 
-        [SerializeField] private ColorPalette colorPalette;
+        [SerializeField] 
+        private ColorPalette colorPalette;
         private ColorPalette ColorPalette => colorPalette;
         
         [Header("Input")]
@@ -84,6 +69,26 @@ namespace Fsi.Ui.Scripts.Ui.Buttons
         [SerializeField] 
         private InputActionReference shortcutActionReference;
         private InputAction shortcutAction;
+
+        [Serializable]
+        public struct ClickTiming
+        {
+            public float inTime;
+            public float waitTime;
+            public float outTime;
+
+            public ClickTiming(float inTime, float waitTime, float outTime)
+            {
+                this.inTime = inTime;
+                this.waitTime = waitTime;
+                this.outTime = outTime;
+            }
+        }
+        
+        [Header("Animation")]
+        
+        [SerializeField]
+        private ClickTiming clickTiming = new(0.05f, 0, 0.05f);
         
         [Header("References")]
         
@@ -157,7 +162,7 @@ namespace Fsi.Ui.Scripts.Ui.Buttons
 
         #region Ui Handers
         
-         #region Submit
+        #region Submit
 
         public virtual void OnSubmit()
         {
@@ -180,11 +185,6 @@ namespace Fsi.Ui.Scripts.Ui.Buttons
             UiInputSettings.Log("FSI Button: OnSelect", gameObject);
             selected = true;
             Refresh();
-
-            if (lastSiblingOnSelect)
-            {
-                transform.SetAsLastSibling();
-            }
             
             StatusChanged?.Invoke();
         }
@@ -262,16 +262,16 @@ namespace Fsi.Ui.Scripts.Ui.Buttons
         
         #region Visuals
 
-        private void ApplyColors(ButtonColorProperty colors)
+        private void ApplyButtonColors(ColorPalette palette, ButtonModifiers modifiers)
         {
             foreach (Graphic g in backgrounds)
             {
-                g.color = colors.Background;
+                g.color = palette.GetColor(modifiers.Background);
             }
 
             foreach (Graphic g in outlines)
             {
-                g.color = colors.Outline;
+                g.color = palette.GetColor(modifiers.Outline);
             }
         }
 
@@ -286,18 +286,18 @@ namespace Fsi.Ui.Scripts.Ui.Buttons
         }
         
         private void RefreshColors()
-        {
+        { 
             if (selected)
             {
-                ApplyColors(ColorPalette.SelectedColors);
+                ApplyButtonColors(ColorPalette, ColorPalette.Selected.Buttons);
             }
             else if (!interactable)
             {
-                ApplyColors(ColorPalette.DisabledColors);
+                ApplyButtonColors(ColorPalette, ColorPalette.Disabled.Buttons);
             }
             else
             {
-                ApplyColors(ColorPalette.NormalColors);
+                ApplyButtonColors(ColorPalette, ColorPalette.Normal.Buttons);
             }
         }
         
@@ -307,53 +307,57 @@ namespace Fsi.Ui.Scripts.Ui.Buttons
 
         private void ClickFlash()
         {
-            Sequence sequence = DOTween.Sequence();
             
             foreach (Graphic bg in backgrounds)
-            {
-                Sequence bs = FlashGraphic(bg, 
-                                           ColorPalette.ClickedColors.Background, 
-                                           ColorPalette.ClickInTime,
-                                           ColorPalette.ClickWaitTime,
-                                           ColorPalette.ClickOutTime,
-                                           ColorPalette.ClickInEase,
-                                           ColorPalette.ClickOutEase);
-                sequence.Insert(0, bs);
+            { 
+                FlashGraphic(bg, 
+                             ColorPalette.GetColor(ColorPalette.Clicked.Buttons.Background), 
+                             clickTiming);
             }
             
             foreach (Graphic outline in outlines)
-            {
-                Sequence os = FlashGraphic(outline, 
-                                           ColorPalette.ClickedColors.Outline,
-                                           ColorPalette.ClickInTime,
-                                           ColorPalette.ClickWaitTime,
-                                           ColorPalette.ClickOutTime,
-                                           ColorPalette.ClickInEase,
-                                           ColorPalette.ClickOutEase);
-                sequence.Insert(0, os);
+            { 
+                FlashGraphic(outline, 
+                             ColorPalette.GetColor(ColorPalette.Clicked.Buttons.Outline), 
+                             clickTiming);
             }
-            
-            sequence.OnComplete(Refresh);
-            
-            sequence.Play();
         }
         
-        private Sequence FlashGraphic(Graphic g, Color color, float inTime, float waitTime, float outTime, Ease inEase, Ease outEase)
+        private void FlashGraphic(Graphic g, Color color, ClickTiming clickTiming)
         {
-            Sequence sequence = DOTween.Sequence();
-            
-            Color start = g.color;
-                
-            Tween s0 = g.DOColor(color, inTime)
-                        .SetEase(inEase);
-            Tween s1 = g.DOColor(start, outTime)
-                        .SetEase(outEase);
-            
-            sequence.Append(s0);
-            sequence.AppendInterval(waitTime);
-            sequence.Append(s1);
+            Color c0 = g.color;
+            StartCoroutine(DoFlash(g, c0, color, clickTiming.inTime, clickTiming.waitTime, clickTiming.outTime));
+        }
 
-            return sequence;
+        private IEnumerator DoFlash(Graphic g, Color c0, Color c1, float inTime, float waitTime, float outTime)
+        {
+            g.color = c0;
+            
+            float t = 0;
+            while (t < inTime)
+            {
+                float v = t / inTime;
+                g.color = Color.Lerp(c0, c1, v);
+                
+                t += Time.deltaTime;
+                yield return null;
+            }
+
+            g.color = c1;
+            
+            yield return new WaitForSeconds(waitTime);
+            
+            t = 0;
+            while (t < outTime)
+            {
+                float v = t / outTime;
+                g.color = Color.Lerp(c1, c0, v);
+                
+                t += Time.deltaTime;
+                yield return null;
+            }
+            
+            g.color = c0;
         }
         
         #endregion
@@ -367,7 +371,7 @@ namespace Fsi.Ui.Scripts.Ui.Buttons
         {
             GameObject parent = Selection.activeGameObject;
             GameObject asset = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
-            Object button = PrefabUtility.InstantiatePrefab(asset.gameObject, parent.transform);
+            Object button = Instantiate(asset.gameObject, parent.transform);
             button.name = "FSI_Button_UI";
         }
         

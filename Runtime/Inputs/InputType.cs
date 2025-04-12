@@ -1,6 +1,4 @@
-using UnityEngine.Localization;
-
-namespace Fsi.Ui.Scripts.Inputs
+namespace Fsi.Ui.Inputs
 {
     public enum InputType
     {

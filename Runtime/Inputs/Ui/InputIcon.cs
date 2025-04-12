@@ -1,11 +1,10 @@
-using Fantazee.Input.Information;
-using Fsi.Ui.Scripts.Inputs.Informations;
-using Fsi.Ui.Scripts.Inputs.Settings;
+using Fsi.Ui.Inputs.Informations;
+using Fsi.Ui.Inputs.Settings;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace Fsi.Ui.Scripts.Inputs.Ui
+namespace Fsi.Ui.Inputs.Ui
 {
     public class InputIcon : MonoBehaviour
     {

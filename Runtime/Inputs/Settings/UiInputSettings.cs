@@ -1,8 +1,8 @@
-using Fantazee.Input.Information;
+using Fsi.Ui.Inputs.Informations;
 using UnityEditor;
 using UnityEngine;
 
-namespace Fsi.Ui.Scripts.Inputs.Settings
+namespace Fsi.Ui.Inputs.Settings
 {
     public class UiInputSettings : ScriptableObject
     {

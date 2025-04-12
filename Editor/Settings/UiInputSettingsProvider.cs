@@ -1,5 +1,5 @@
+using Fsi.Ui.Inputs.Settings;
 using Fsi.Ui.Labels;
-using Fsi.Ui.Scripts.Inputs.Settings;
 using Fsi.Ui.Spacers;
 using UnityEditor;
 using UnityEditor.UIElements;

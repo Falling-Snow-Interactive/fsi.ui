@@ -1,10 +1,10 @@
 using System;
 using Fsi.Gameplay;
-using Fsi.Ui.Scripts.Inputs.Settings;
+using Fsi.Ui.Inputs.Settings;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Fsi.Ui.Scripts.Inputs
+namespace Fsi.Ui.Inputs
 {
     public class InputController : MbSingleton<InputController>
     {
