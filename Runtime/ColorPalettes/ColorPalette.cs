@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Fsi.Ui.ColorPalettes
 {
@@ -6,7 +7,7 @@ namespace Fsi.Ui.ColorPalettes
     public class ColorPalette : ScriptableObject
     {
         [SerializeField]
-        private Color color;
+        private Color color = Color.white;
         
         [SerializeField]
         private ColorProperties normal;
@@ -21,23 +22,12 @@ namespace Fsi.Ui.ColorPalettes
         public ColorProperties Disabled => disabled;
         
         [SerializeField]
-        private ColorProperties clicked;
-        public ColorProperties Clicked => clicked;
+        private ColorProperties flash;
+        public ColorProperties Flash => flash;
 
-        public Color GetColor(ColorModifier modifier)
+        public Color GetColor(Color modifier)
         {
-            Color.RGBToHSV(color, out float h, out float s, out float v);
-            
-            h += modifier.HAdd;
-            s += modifier.SAdd;
-            v += modifier.VAdd;
-
-            h *= modifier.HMod;
-            s *= modifier.SMod;
-            v *= modifier.VMod;
-            
-            Color c = Color.HSVToRGB(h, s, v);
-            
+            Color c = color * modifier;
             return c;
         }
     }

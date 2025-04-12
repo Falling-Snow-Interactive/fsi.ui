@@ -39,7 +39,7 @@ namespace Fsi.Ui.Inputs
         private void OnControlsChanged(PlayerInput _)
         {
             string scheme = playerInput.currentControlScheme;
-            UiInputSettings.Log($"OnControlsChanged: {scheme}", gameObject);
+            UiSettings.Log($"OnControlsChanged: {scheme}", gameObject);
             InputType = scheme switch
                                       {
                                           "Keyboard & Mouse" => InputType.MouseKeyboard,

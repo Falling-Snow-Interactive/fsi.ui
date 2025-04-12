@@ -23,7 +23,7 @@ namespace Fsi.Ui.Settings
 
         private static void OnActivate(string searchContext, VisualElement root)
         {
-            SerializedObject settingsProp = UiInputSettings.GetSerializedSettings();
+            SerializedObject settingsProp = UiSettings.GetSerializedSettings();
 
             ScrollView scrollView = new();
             root.Add(scrollView);

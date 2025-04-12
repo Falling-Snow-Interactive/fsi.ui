@@ -6,9 +6,11 @@ using UnityEngine.UIElements;
 
 namespace Fsi.Ui.ColorPalettes
 {
-    [CustomEditor(typeof(ColorPalette))]
+    // [CustomEditor(typeof(ColorPalette))]
     public class ColorPalettePropertyDrawer : Editor
     {
+        private PropertyField colorField;
+        
         public override VisualElement CreateInspectorGUI()
         {
             VisualElement root = new();
@@ -19,25 +21,8 @@ namespace Fsi.Ui.ColorPalettes
             SerializedProperty disabledProp = serializedObject.FindProperty("disabled");
             SerializedProperty clickedProp = serializedObject.FindProperty("clicked");
 
-            PropertyField colorField = new(colorProp);
+            colorField = new(colorProp);
             root.Add(colorField);
-            
-            Color.RGBToHSV(colorProp.colorValue, out float h, out float s, out float v);
-            Slider hField = new()
-                                {
-                                    label = "Hue",
-                                    lowValue = 0,
-                                    highValue = 1,
-                                    value = h,
-                                };
-            root.Add(hField);
-            hField.RegisterValueChangedCallback(evt =>
-                                                {
-                                                    Color c = Color.HSVToRGB(evt.newValue, 1, 1);
-                                                    colorProp.colorValue = c;
-                                                    serializedObject.ApplyModifiedProperties();
-                                                    SceneView.RepaintAll();
-                                                });
             
             root.Add(Spacer.Wide());
 
@@ -90,23 +75,26 @@ namespace Fsi.Ui.ColorPalettes
             VisualElement root = new();
             
             // buttons
+            Foldout buttonsFold = new() { text = "Buttons" };
+            root.Add(buttonsFold);
+            
             SerializedProperty buttonsProp = property.FindPropertyRelative("buttons");
 
             SerializedProperty buttonsBgProp = buttonsProp.FindPropertyRelative("background");
             VisualElement bgModifier = MakeColorModifier(color, buttonsBgProp);
-            root.Add(bgModifier);
+            buttonsFold.Add(bgModifier);
             
-            root.Add(Spacer.Wide());
+            buttonsFold.Add(Spacer.Wide());
             
             SerializedProperty buttonsOutlineProp = buttonsProp.FindPropertyRelative("outline");
             VisualElement outlineModifier = MakeColorModifier(color, buttonsOutlineProp);
-            root.Add(outlineModifier);
+            buttonsFold.Add(outlineModifier);
             
-            root.Add(Spacer.Wide());
+            buttonsFold.Add(Spacer.Wide());
             
             SerializedProperty buttonsAccentProp = buttonsProp.FindPropertyRelative("accent");
             VisualElement accentModifier = MakeColorModifier(color, buttonsAccentProp);
-            root.Add(accentModifier);
+            buttonsFold.Add(accentModifier);
             
             return root;
         }
@@ -132,6 +120,13 @@ namespace Fsi.Ui.ColorPalettes
             
             root.Add(colorField);
             root.Add(propertyField);
+            
+            this.colorField.RegisterValueChangeCallback(evt =>
+                                                        {
+                                                            colorField.value = GetColor(color, property);
+                                                            serializedObject.ApplyModifiedProperties();
+                                                            SceneView.RepaintAll();
+                                                        });
             
             return root;
         }

@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Fsi.Ui.ColorPalettes
 {
-    [CustomPropertyDrawer(typeof(ColorModifier))]
+    // [CustomPropertyDrawer(typeof(ColorModifier))]
     public class ColorModifierDrawer : PropertyDrawer
     {
         private SerializedProperty hAddProp;

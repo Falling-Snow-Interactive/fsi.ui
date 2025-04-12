@@ -1,5 +1,8 @@
+using System;
+using Fsi.Ui.ColorPalettes;
 using Fsi.Ui.Inputs.Informations;
 using Fsi.Ui.Inputs.Settings;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -8,17 +11,24 @@ namespace Fsi.Ui.Inputs.Ui
 {
     public class InputIcon : MonoBehaviour
     {
-        [SerializeField]
-        private Image icon;
+        public InputActionReference actionReference;
         
-        [SerializeField]
-        private InputActionReference selectReference;
-        
-        public InputActionReference shortcutReference;
-
         [SerializeField]
         private InputType type = InputType.MouseKeyboard;
+        
+        [Header("Color Palette")]
+        
+        [CanBeNull]
+        [SerializeField]
+        private ColorPaletteReferences colorPaletteReferences;
+        public ColorPaletteReferences ColorPaletteReferences => colorPaletteReferences;
+        
+        [Header("References")]
+        
+        [SerializeField]
+        private Image icon;
 
+        // Information to grab glyphs
         private InputInformationGroup informationGroup;
 
         private void OnValidate()
@@ -54,28 +64,33 @@ namespace Fsi.Ui.Inputs.Ui
 
         private void RefreshIcon()
         {
-            if (UiInputSettings.Settings)
+            if (UiSettings.Settings)
             {
                 informationGroup = type switch
                                           {
-                                              InputType.MouseKeyboard => UiInputSettings.Settings.MouseKeyboard,
-                                              InputType.SteamDeck => UiInputSettings.Settings.Steam,
-                                              InputType.Xbox => UiInputSettings.Settings.Xbox,
-                                              InputType.PlayStation => UiInputSettings.Settings.PlayStation,
-                                              InputType.Nintendo => UiInputSettings.Settings.SwitchPro,
-                                              _ => informationGroup
+                                              InputType.MouseKeyboard => UiSettings.Settings.MouseKeyboard,
+                                              InputType.SteamDeck => UiSettings.Settings.Steam,
+                                              InputType.Xbox => UiSettings.Settings.Xbox,
+                                              InputType.PlayStation => UiSettings.Settings.PlayStation,
+                                              InputType.Nintendo => UiSettings.Settings.SwitchPro,
+                                              InputType.Touch => UiSettings.Settings.Touch,
+                                              _ => throw new ArgumentOutOfRangeException()
                                           };
 
                 if (icon)
                 {
-                    var actionReference = shortcutReference ? shortcutReference : selectReference;
                     foreach (InputBinding binding in actionReference.action.bindings)
                     {
                         if (informationGroup.TryGetInformation(binding.path, out UiInputInformation info))
                         {
+                            colorPaletteReferences?.Visible(true);
                             icon.gameObject.SetActive(true);
                             icon.sprite = info.Sprite;
                             return;
+                        }
+                        else
+                        {
+                            colorPaletteReferences?.Visible(false);
                         }
                     }
             

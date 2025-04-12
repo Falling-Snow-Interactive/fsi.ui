@@ -7,7 +7,7 @@ namespace Fsi.Ui.ColorPalettes
     public class ColorProperties
     {
         [SerializeField]
-        private ButtonModifiers buttons;
-        public ButtonModifiers Buttons => buttons;
+        private ColorPaletteMultipliers buttons;
+        public ColorPaletteMultipliers Buttons => buttons;
     }
 }

@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace Fsi.Ui.Inputs.Settings
 {
-    public class UiInputSettings : ScriptableObject
+    public class UiSettings : ScriptableObject
     {
-        private const string ResourcePath = "Settings/UiInputSettings";
+        private const string ResourcePath = "Settings/UiSettings";
         private const string FullPath = "Assets/Resources/" + ResourcePath + ".asset";
 
-        private static UiInputSettings _settings;
-        public static UiInputSettings Settings => _settings ??= GetOrCreateSettings();
+        private static UiSettings _settings;
+        public static UiSettings Settings => _settings ??= GetOrCreateSettings();
         
         // Icons
         [SerializeField]
@@ -36,6 +36,10 @@ namespace Fsi.Ui.Inputs.Settings
         [SerializeField]
         private InputInformationGroup mouseKeyboard;
         public InputInformationGroup MouseKeyboard => mouseKeyboard;
+
+        [SerializeField]
+        private InputInformationGroup touch;
+        public InputInformationGroup Touch => touch;
         
         // Debugging
         [SerializeField]
@@ -49,9 +53,9 @@ namespace Fsi.Ui.Inputs.Settings
 
         #region Settings
 
-        public static UiInputSettings GetOrCreateSettings()
+        public static UiSettings GetOrCreateSettings()
         {
-            UiInputSettings settings = Resources.Load<UiInputSettings>(ResourcePath);
+            UiSettings settings = Resources.Load<UiSettings>(ResourcePath);
 
             #if UNITY_EDITOR
             if (!settings)
@@ -66,7 +70,7 @@ namespace Fsi.Ui.Inputs.Settings
                     AssetDatabase.CreateFolder("Assets/Resources", "Settings");
                 }
 
-                settings = CreateInstance<UiInputSettings>();
+                settings = CreateInstance<UiSettings>();
                 AssetDatabase.CreateAsset(settings, FullPath);
                 AssetDatabase.SaveAssets();
             }
@@ -83,12 +87,14 @@ namespace Fsi.Ui.Inputs.Settings
         #endif
 
         #endregion
-
+        
+        #region Logging
+        
         public static void Log(string message, GameObject gameObject = null)
         {
             if (Settings.logs)
             {
-                Debug.Log($"Ui Input: {message}", gameObject);
+                Debug.Log($"Ui: {message}", gameObject);
             }
         }
 
@@ -96,7 +102,7 @@ namespace Fsi.Ui.Inputs.Settings
         {
             if (Settings.warnings)
             {
-                Debug.LogWarning($"Ui Input: {message}", gameObject);
+                Debug.LogWarning($"Ui: {message}", gameObject);
             }
         }
 
@@ -104,8 +110,10 @@ namespace Fsi.Ui.Inputs.Settings
         {
             if (Settings.errors)
             {
-                Debug.LogError($"Ui Input: {message}", gameObject);
+                Debug.LogError($"Ui: {message}", gameObject);
             }
         }
+        
+        #endregion
     }
 }
