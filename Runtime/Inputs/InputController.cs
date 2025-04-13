@@ -45,10 +45,11 @@ namespace Fsi.Ui.Inputs
                                           "Keyboard & Mouse" => InputType.MouseKeyboard,
                                           "Steam" => InputType.SteamDeck,
                                           "Xbox" => InputType.Xbox,
-                                          "PlayStation5" => InputType.PlayStation,
+                                          "PlayStation" => InputType.PlayStation,
                                           "SwitchPro" => InputType.Nintendo,
                                           "SwitchJoy" => InputType.Nintendo,
-                                          _ => InputType
+                                          "Touch" => InputType.Touch,
+                                          _ => throw new ArgumentOutOfRangeException()
                                       };
 
             InputChanged?.Invoke();

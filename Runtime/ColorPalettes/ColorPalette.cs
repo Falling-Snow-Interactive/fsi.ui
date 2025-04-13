@@ -22,8 +22,12 @@ namespace Fsi.Ui.ColorPalettes
         public ColorProperties Disabled => disabled;
         
         [SerializeField]
-        private ColorProperties flash;
-        public ColorProperties Flash => flash;
+        private ColorProperties pressed;
+        public ColorProperties Pressed => pressed;
+        
+        [SerializeField]
+        private ColorProperties disabledSelected;
+        public ColorProperties DisabledSelected => disabledSelected;
 
         public Color GetColor(Color modifier)
         {

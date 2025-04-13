@@ -97,9 +97,7 @@ namespace Fsi.Ui.Spacers
         
         public static VisualElement Tall(float width = DefaultSize, bool light = false)
         {
-            return new Spacer(size: width, 
-                              wide: false, 
-                              light: light);
+            return new Spacer(size: width, wide: false, light: light);
         }
     }
 }

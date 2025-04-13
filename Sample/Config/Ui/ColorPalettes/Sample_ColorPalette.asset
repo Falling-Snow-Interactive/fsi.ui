@@ -20,16 +20,21 @@ MonoBehaviour:
       accent: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   selected:
     buttons:
-      background: {r: 0.6556604, g: 1, b: 0.94152725, a: 1}
-      outline: {r: 0, g: 1, b: 0.83006525, a: 1}
-      accent: {r: 0.33490568, g: 1, b: 0.8878468, a: 1}
+      background: {r: 0.7122642, g: 1, b: 0.9971523, a: 1}
+      outline: {r: 0, g: 0.31783962, b: 1, a: 1}
+      accent: {r: 0.5707547, g: 0.6269013, b: 1, a: 1}
   disabled:
     buttons:
       background: {r: 1, g: 0.7028302, b: 0.7028302, a: 1}
       outline: {r: 1, g: 0, b: 0, a: 1}
       accent: {r: 1, g: 0.2971698, b: 0.2971698, a: 1}
-  flash:
+  pressed:
     buttons:
-      background: {r: 0, g: 1, b: 0.8295455, a: 1}
-      outline: {r: 0, g: 1, b: 0.83137256, a: 1}
-      accent: {r: 0, g: 1, b: 0.83137256, a: 1}
+      background: {r: 0, g: 0.31764707, b: 1, a: 1}
+      outline: {r: 0, g: 0.31764707, b: 1, a: 1}
+      accent: {r: 0, g: 0.31764707, b: 1, a: 1}
+  disabledSelected:
+    buttons:
+      background: {r: 1, g: 0.7019608, b: 0.7019608, a: 1}
+      outline: {r: 0, g: 0.31764707, b: 1, a: 1}
+      accent: {r: 1, g: 0.29803923, b: 0.29803923, a: 1}

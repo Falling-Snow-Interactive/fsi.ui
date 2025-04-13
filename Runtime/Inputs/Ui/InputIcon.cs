@@ -13,8 +13,7 @@ namespace Fsi.Ui.Inputs.Ui
     {
         public InputActionReference actionReference;
         
-        [SerializeField]
-        private InputType type = InputType.MouseKeyboard;
+        public InputType type = InputType.SteamDeck;
         
         [Header("Color Palette")]
         
@@ -52,7 +51,7 @@ namespace Fsi.Ui.Inputs.Ui
             Refresh();
         }
 
-        private void Refresh()
+        public void Refresh()
         {
             if (InputController.Instance)
             {
@@ -77,7 +76,7 @@ namespace Fsi.Ui.Inputs.Ui
                                               _ => throw new ArgumentOutOfRangeException()
                                           };
 
-                if (icon)
+                if (icon && actionReference)
                 {
                     foreach (InputBinding binding in actionReference.action.bindings)
                     {

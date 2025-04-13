@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Fsi.Ui.ColorPalettes;
 using Fsi.Ui.ColorPalettes.Animation.Timing;
+using Fsi.Ui.Inputs;
 using Fsi.Ui.Inputs.Settings;
 using Fsi.Ui.Inputs.Ui;
 using UnityEditor;
@@ -18,46 +19,24 @@ using Object = UnityEngine.Object;
 
 namespace Fsi.Ui.Buttons
 {
-    public abstract class FsiButton : MonoBehaviour, 
-                                      ISubmitHandler, ISelectHandler, IDeselectHandler, // Input
-                                      IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, // Pointer
-    IMoveHandler
+    public abstract class FsiButton : Button //, 
+                                      // ISubmitHandler, ISelectHandler, IDeselectHandler, // Input
+                                      // IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, // Pointer
+                                      // IMoveHandler
     {
-        private const string PrefabPath = "Packages/com.fallingsnowinteractive.ui/Assets/Prefabs/Fsi_Button_Ui.prefab";
-        
-        public event Action StatusChanged;
-        
-        [Space(10)]
-        [SerializeField] 
-        private UnityEvent onSubmit;
-        
-        [SerializeField]
-        private Navigation navigation;
-        
-        [Header("Simple Button")]
-        
-        [SerializeField] 
-        private bool selected = false;
-        public bool Selected => selected;
-        
-        [SerializeField] 
-        private bool interactable = false;
-        public bool Interactable
+        protected bool IsSelected
         {
-            get => interactable;
-            set
+            get
             {
-                interactable = value;
-                if (button)
+                if (EventSystem.current == null)
                 {
-                    button.interactable = value;
+                    return false;
                 }
-
-                Refresh();
+                return EventSystem.current.currentSelectedGameObject == gameObject;
             }
-        }
-
-        [Header("Colours")]
+        } 
+        
+        // [Header("Colours")]
 
         [SerializeField] 
         private ColorPalette colorPalette;
@@ -66,7 +45,10 @@ namespace Fsi.Ui.Buttons
         [SerializeField]
         private ColorPaletteReferences colorPaletteReferences;
 
-        [Header("Input")]
+        // Submit Prompt
+        
+        [SerializeField]
+        private InputType inputType = InputType.SteamDeck;
 
         [SerializeField]
         private bool showSubmitIcon = true;
@@ -77,7 +59,7 @@ namespace Fsi.Ui.Buttons
         [SerializeField]
         protected InputIcon submitIcon;
         
-        [Header("Shortcut")]
+        // Input Shortcut
         
         [SerializeField]
         private bool showShortcutIcon = false;
@@ -89,35 +71,37 @@ namespace Fsi.Ui.Buttons
         [SerializeField]
         protected InputIcon shortcutIcon;
         
-        [Header("Pointer")]
-        
-        [SerializeField]
-        private bool selectOnPointerEnter;
-        
-        [SerializeField]
-        private bool deselectOnPointerExit;
-        
-        [Header("Animation")]
-        
-        [SerializeField]
-        private FlashTiming flashTiming = new();
-        
-        [Header("References")]
-
-        [SerializeField]
-        protected Button button;
-        public Button Button => button;
-        
         #region MonoBehavior Events
         
-        private void OnValidate()
+        protected new virtual void OnValidate()
         {
-            Interactable = interactable;
+            UiSettings.Log("FSI Button: OnValidate");
+            base.OnValidate();
+            
+            // Do something... 
+            if (shortcutIcon)
+            {
+                shortcutIcon.actionReference = shortcutActionReference;
+                shortcutIcon.type = inputType;
+                shortcutIcon.Refresh();
+            }
+
+            if (submitIcon)
+            {
+                submitIcon.type = inputType;
+                submitIcon.Refresh();
+            }
+            
             Refresh();
         }
 
-        protected virtual void Awake()
+        protected new virtual void Awake()
         {
+            UiSettings.Log("FSI Button: Awake");
+            base.Awake();
+            
+            // Do something... 
+            
             if (shortcutActionReference)
             {
                 shortcutIcon.actionReference = shortcutActionReference;
@@ -125,8 +109,15 @@ namespace Fsi.Ui.Buttons
             }
         }
 
-        protected virtual void OnEnable()
+        protected new virtual void OnEnable()
         {
+            Debug.Log("FSI Button: OnEnable");
+            base.OnEnable();
+            
+            // Do something... 
+
+            InputController.InputChanged += OnInputChanged;
+            
             Refresh();
 
             if (shortcutAction != null)
@@ -135,18 +126,34 @@ namespace Fsi.Ui.Buttons
                 shortcutAction.Enable();
             }
             
-            StatusChanged?.Invoke();
+            // StatusChanged?.Invoke();
         }
 
-        protected virtual void OnDisable()
+        protected new virtual void OnDisable()
         {
+            Debug.Log("FSI Button: OnDisable");
+            base.OnDisable();
+            
+            // Do something... 
+
+            InputController.InputChanged -= OnInputChanged;
+            
             if (shortcutAction != null)
             {
                 shortcutAction.performed -= OnShortcut;
                 shortcutAction.Disable();
             }
             
-            StatusChanged?.Invoke();
+            // StatusChanged?.Invoke();
+        }
+
+        #endregion
+        
+        #region Input Prompts
+        
+        private void OnInputChanged()
+        {
+            inputType = InputController.Instance.InputType;
         }
         
         #endregion
@@ -156,7 +163,9 @@ namespace Fsi.Ui.Buttons
         private void OnShortcut(InputAction.CallbackContext ctx)
         {
             UiSettings.Log("FSI Button: OnShortcut", gameObject);
-            // OnClick();
+            base.OnSelect(null);
+            
+            Refresh();
         }
         
         #endregion
@@ -164,109 +173,136 @@ namespace Fsi.Ui.Buttons
         #region Ui Handers
         
         #region Submit
-
-        public virtual void OnSubmit()
-        {
-            UiSettings.Log("FSI Button: OnSubmit", gameObject);
-            colorPaletteReferences.Flash(this, ColorPalette, ColorPalette.Flash.Buttons, flashTiming);
-            if (submitIcon)
-            {
-                submitIcon.ColorPaletteReferences.Flash(this, ColorPalette, ColorPalette.Flash.Buttons, flashTiming);
-            }
-
-            if (shortcutIcon)
-            {
-                shortcutIcon.ColorPaletteReferences.Flash(this, ColorPalette, ColorPalette.Flash.Buttons, flashTiming);
-            }
-            onSubmit?.Invoke();
-        }
         
-        public void OnSubmit(BaseEventData _)
+        public override void OnSubmit(BaseEventData evt)
         {
-            OnSubmit();
+            UiSettings.Log($"FSI Button: OnSubmit ({name})", gameObject);
+            base.OnSubmit(evt);
+            
+            Refresh();
         }
         
         #endregion
         
         #region Select
-
-        protected virtual void OnSelect()
-        {
-            UiSettings.Log("FSI Button: OnSelect", gameObject);
-            selected = true;
-            Refresh();
-            
-            StatusChanged?.Invoke();
-        }
         
-        public void OnSelect(BaseEventData _)
+        public override void OnSelect(BaseEventData evt)
         {
-            OnSelect();
+            UiSettings.Log($"FSI Button: OnSelect ({name})", gameObject);
+            base.OnSelect(evt);
+            
+            ApplyPalette(ColorPalette, colorPalette.Selected.Buttons);
+            
+            // Refresh();
         }
         
         #endregion
         
         #region Deselect
 
-        protected virtual void OnDeselect()
+        public override void OnDeselect(BaseEventData evt)
         {
-            UiSettings.Log("FSI Button: OnDeselect", gameObject);
-            selected = false;
-            Refresh();
-        }
-
-        public void OnDeselect(BaseEventData _)
-        {
-            OnDeselect();
+            UiSettings.Log($"FSI Button: OnDeselect ({name})", gameObject);
+            base.OnDeselect(evt);
+            
+            // ApplyPalette(ColorPalette, colorPalette.Selected.Buttons);
+            
+            // Refresh();
         }
         
         #endregion
         
         #region Pointer Enter
 
-        protected virtual void OnPointerEnter()
+        public override void OnPointerEnter(PointerEventData evt)
         {
-            UiSettings.Log("FSI Button: OnPointerEnter", gameObject);
-            if (selectOnPointerEnter)
-            {
-                EventSystem.current.SetSelectedGameObject(gameObject);
-            }
-        }
-
-        public void OnPointerEnter(PointerEventData _)
-        {
-            OnPointerEnter();
+            UiSettings.Log($"FSI Button: OnPointerEnter ({name})", gameObject);
+            base.OnPointerEnter(evt);
+            
+            ApplyPalette(ColorPalette, colorPalette.Selected.Buttons);
+            
+            // Refresh();
         }
         
         #endregion
         
         #region Pointer Exit
-
-        protected virtual void OnPointerExit()
-        {
-            UiSettings.Log("FSI Button: OnPointerExit", gameObject);
-            if (deselectOnPointerExit && EventSystem.current.currentSelectedGameObject == gameObject)
-            {
-                EventSystem.current.SetSelectedGameObject(null);
-            }
-        }
         
-        public void OnPointerExit(PointerEventData _)
+        public override void OnPointerExit(PointerEventData evt)
         {
-            OnPointerExit();
+            UiSettings.Log($"FSI Button: OnPointerExit ({name})", gameObject);
+            base.OnPointerExit(evt);
+            
+            // Refresh();
         }
         
         #endregion
         
         #region Pointer Click
         
-        public void OnPointerClick(PointerEventData eventData)
+        public override void OnPointerClick(PointerEventData eventData)
         {
-            OnSubmit();
+            UiSettings.Log($"FSI Button: OnPointerClick ({name})", gameObject);
+            base.OnPointerClick(eventData);
+            
+            ApplyPalette(ColorPalette, colorPalette.Pressed.Buttons);
+            
+            Refresh();
         }
         
         #endregion
 
+        #endregion
+        
+        #region Refresh
+        
+        private void Refresh()
+        {
+            RefreshInputIcons();
+            // RefreshColors();
+        }
+        
+        private void RefreshInputIcons()
+        {
+            if (shortcutIcon)
+            {
+                shortcutIcon.gameObject.SetActive(showShortcutIcon && shortcutAction != null);
+            }
+            
+            if (submitIcon)
+            {
+                if (showSubmitIcon)
+                {
+                    submitIcon.gameObject.SetActive(!showOnSelectOnly 
+                                                    || currentSelectionState == SelectionState.Selected 
+                                                    || currentSelectionState == SelectionState.Highlighted);
+                }
+                else
+                {
+                    submitIcon.gameObject.SetActive(false);
+                }
+            }
+        }
+        
+        // private void RefreshColors()
+        // {
+        //     ColorPaletteMultipliers multipliers = GetColorProperties().Buttons;
+        //     ApplyPalette(ColorPalette, multipliers);
+        // }
+
+        private ColorProperties GetColorProperties()
+        {
+            return currentSelectionState switch
+                   {
+                       SelectionState.Normal => ColorPalette.Normal,
+                       SelectionState.Highlighted => ColorPalette.Selected,
+                       SelectionState.Pressed => ColorPalette.Pressed,
+                       SelectionState.Selected => ColorPalette.Selected,
+                       SelectionState.Disabled => IsSelected ? ColorPalette.DisabledSelected : ColorPalette.Disabled,
+                       _ => throw new ArgumentOutOfRangeException()
+                   };
+        }
+        
         #endregion
         
         #region Visuals
@@ -297,69 +333,7 @@ namespace Fsi.Ui.Buttons
                 submitIcon.ColorPaletteReferences?.ApplyPalette(palette, modifiers);
             }
         }
-
-        private void Refresh()
-        {
-            RefreshInputIcons();
-            RefreshColors();
-        }
-        
-        private void RefreshColors()
-        {
-            ColorPaletteMultipliers multipliers = ColorPalette.Normal.Buttons;
-            if (selected)
-            {
-                multipliers = ColorPalette.Selected.Buttons;
-            }
-            else if (!interactable)
-            {
-                multipliers = ColorPalette.Disabled.Buttons;
-            }
-            ApplyPalette(ColorPalette, multipliers);
-        }
-
-        private void RefreshInputIcons()
-        {
-            if (shortcutIcon)
-            {
-                shortcutIcon.gameObject.SetActive(showShortcutIcon);
-            }
-            
-            if (submitIcon && showSubmitIcon)
-            {
-                if (!showShortcutIcon || !shortcutIcon)
-                {
-                    submitIcon.gameObject.SetActive(!showOnSelectOnly || Selected);
-                }
-                else
-                {
-                    submitIcon.gameObject.SetActive(false);
-                }
-            }
-        }
         
         #endregion
-        
-        #region Create
-        
-        #if UNITY_EDITOR
-        
-        [MenuItem("GameObject/FSI/Ui/Button")]
-        public static void CreateButton()
-        {
-            GameObject parent = Selection.activeGameObject;
-            GameObject asset = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
-            Object button = Instantiate(asset.gameObject, parent.transform);
-            button.name = "FSI_Button_UI";
-        }
-        
-        #endif
-        
-        #endregion
-
-        public void OnMove(AxisEventData eventData)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

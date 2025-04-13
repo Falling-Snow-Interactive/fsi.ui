@@ -83,6 +83,10 @@ namespace Fsi.Ui.Settings
             PropertyField errorField = new(errorProp){ label = "Errors" };
             debugContainer.Add(errorField);
             
+            SerializedProperty eventsProp = settingsProp.FindProperty("events");
+            PropertyField eventsField = new(eventsProp){ label = "Events" };
+            debugContainer.Add(eventsField);
+            
             scrollView.Add(Spacer.Wide());
             
             root.Bind(settingsProp);

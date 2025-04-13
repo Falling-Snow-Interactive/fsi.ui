@@ -50,6 +50,9 @@ namespace Fsi.Ui.Inputs.Settings
         
         [SerializeField]
         private bool errors = false;
+        
+        [SerializeField]
+        private bool events = false;
 
         #region Settings
 
@@ -94,7 +97,7 @@ namespace Fsi.Ui.Inputs.Settings
         {
             if (Settings.logs)
             {
-                Debug.Log($"Ui: {message}", gameObject);
+                Debug.Log($"Ui | {message}", gameObject);
             }
         }
 
@@ -102,7 +105,7 @@ namespace Fsi.Ui.Inputs.Settings
         {
             if (Settings.warnings)
             {
-                Debug.LogWarning($"Ui: {message}", gameObject);
+                Debug.LogWarning($"Ui | {message}", gameObject);
             }
         }
 
@@ -110,9 +113,17 @@ namespace Fsi.Ui.Inputs.Settings
         {
             if (Settings.errors)
             {
-                Debug.LogError($"Ui: {message}", gameObject);
+                Debug.LogError($"Ui | {message}", gameObject);
             }
         }
+
+        public static void LogEvent(string message, GameObject gameObject = null)
+        {
+            if (Settings.events)
+            {
+                Debug.Log($"Ui | {message}", gameObject);
+            }
+    }
         
         #endregion
     }
