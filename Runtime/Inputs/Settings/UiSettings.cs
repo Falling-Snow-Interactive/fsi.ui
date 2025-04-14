@@ -14,32 +14,32 @@ namespace Fsi.Ui.Inputs.Settings
         
         // Icons
         [SerializeField]
-        private InputInformationGroup xbox;
-        public InputInformationGroup Xbox => xbox;
+        private PromptInformationGroup xbox;
+        public PromptInformationGroup Xbox => xbox;
         
         [SerializeField]
-        private InputInformationGroup playStation;
-        public InputInformationGroup PlayStation => playStation;
+        private PromptInformationGroup playStation;
+        public PromptInformationGroup PlayStation => playStation;
 
         [SerializeField]
-        private InputInformationGroup switchPro;
-        public InputInformationGroup SwitchPro => switchPro;
+        private PromptInformationGroup switchPro;
+        public PromptInformationGroup SwitchPro => switchPro;
         
         [SerializeField]
-        private InputInformationGroup switchJoy;
-        public InputInformationGroup SwitchJoy => switchJoy;
+        private PromptInformationGroup switchJoy;
+        public PromptInformationGroup SwitchJoy => switchJoy;
 
         [SerializeField]
-        private InputInformationGroup steam;
-        public InputInformationGroup Steam => steam;
+        private PromptInformationGroup steam;
+        public PromptInformationGroup Steam => steam;
 
         [SerializeField]
-        private InputInformationGroup mouseKeyboard;
-        public InputInformationGroup MouseKeyboard => mouseKeyboard;
+        private PromptInformationGroup mouseKeyboard;
+        public PromptInformationGroup MouseKeyboard => mouseKeyboard;
 
         [SerializeField]
-        private InputInformationGroup touch;
-        public InputInformationGroup Touch => touch;
+        private PromptInformationGroup touch;
+        public PromptInformationGroup Touch => touch;
         
         // Debugging
         [SerializeField]

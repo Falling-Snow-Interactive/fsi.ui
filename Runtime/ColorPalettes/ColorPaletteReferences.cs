@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Fsi.Ui.ColorPalettes.Animation.Timing;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,93 +10,32 @@ namespace Fsi.Ui.ColorPalettes
     {
         [SerializeField]
         private List<Graphic> backgrounds = new();
-        public List<Graphic> Backgrounds => backgrounds;
         
         [SerializeField]
         private List<Graphic> outlines = new();
-        public List<Graphic> Outlines => outlines;
         
         [SerializeField]
         private List<Graphic> accents = new();
-        public List<Graphic> Accents => accents;
-
-        public void ApplyPalette(ColorPalette palette, ColorPaletteMultipliers modifiers)
-        {
-            foreach (Graphic background in backgrounds)
-            {
-                Color c = palette.GetColor(modifiers.Background);
-                background.color = c;
-            }
-
-            foreach (Graphic outline in outlines)
-            {
-                Color c = palette.GetColor(modifiers.Outline);
-                outline.color = c;
-            }
-
-            foreach (Graphic accent in accents)
-            {
-                Color c = palette.GetColor(modifiers.Accent);
-                accent.color = c;
-            }
-        }
-
-        public void Flash(MonoBehaviour target, ColorPalette palette, ColorPaletteMultipliers modifiers, FlashTiming timing)
-        {
-            foreach (Graphic background in backgrounds)
-            {
-                Color c0 = background.color;
-                Color c1 = palette.GetColor(modifiers.Background);
-                target.StartCoroutine(DoFlash(background, c0, c1, timing));
-            }
-        }
         
-        public IEnumerator DoFlash(Graphic g, Color c0, Color c1, FlashTiming timing)
+        public void SetColor(Color color, ColorGroup group, float multiplier, float duration)
         {
-            g.color = c0;
+            Color background = color * (group.Background * multiplier);
+            Color outline = color * (group.Outline * multiplier);
+            Color accent = color * (group.Accent * multiplier);
             
-            float t = 0;
-            while (t < timing.InTime)
+            foreach (Graphic b in backgrounds)
             {
-                float v = t / timing.InTime;
-                g.color = Color.Lerp(c0, c1, v);
-                
-                t += Time.deltaTime;
-                yield return null;
+                b.CrossFadeColor(background, duration, true, true);
             }
 
-            g.color = c1;
-            
-            yield return new WaitForSeconds(timing.WaitTime);
-            
-            t = 0;
-            while (t < timing.OutTime)
+            foreach (Graphic o in outlines)
             {
-                float v = t / timing.OutTime;
-                g.color = Color.Lerp(c1, c0, v);
-                
-                t += Time.deltaTime;
-                yield return null;
-            }
-            
-            g.color = c0;
-        }
-
-        public void Visible(bool set)
-        {
-            foreach (Graphic background in backgrounds)
-            {
-                background.gameObject.SetActive(set);
+                o.CrossFadeColor(outline, duration, true, true);
             }
 
-            foreach (var outline in outlines)
+            foreach (Graphic a in accents)
             {
-                outline.gameObject.SetActive(set);
-            }
-
-            foreach (var accent in accents)
-            {
-                accent.gameObject.SetActive(set);
+                a.CrossFadeColor(accent, duration, true, true);
             }
         }
     }

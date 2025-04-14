@@ -14,27 +14,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 1, b: 1, a: 1}
   normal:
-    buttons:
-      background: {r: 1, g: 1, b: 1, a: 1}
-      outline: {r: 0, g: 0, b: 0, a: 1}
-      accent: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  selected:
-    buttons:
-      background: {r: 0.7122642, g: 1, b: 0.9971523, a: 1}
-      outline: {r: 0, g: 0.31783962, b: 1, a: 1}
-      accent: {r: 0.5707547, g: 0.6269013, b: 1, a: 1}
-  disabled:
-    buttons:
-      background: {r: 1, g: 0.7028302, b: 0.7028302, a: 1}
-      outline: {r: 1, g: 0, b: 0, a: 1}
-      accent: {r: 1, g: 0.2971698, b: 0.2971698, a: 1}
+    background: {r: 1, g: 1, b: 1, a: 1}
+    outline: {r: 0, g: 0, b: 0, a: 1}
+    accent: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  highlighted:
+    background: {r: 0.8160377, g: 0.99442494, b: 1, a: 1}
+    outline: {r: 0, g: 0, b: 0, a: 1}
+    accent: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   pressed:
-    buttons:
-      background: {r: 0, g: 0.31764707, b: 1, a: 1}
-      outline: {r: 0, g: 0.31764707, b: 1, a: 1}
-      accent: {r: 0, g: 0.31764707, b: 1, a: 1}
-  disabledSelected:
-    buttons:
-      background: {r: 1, g: 0.7019608, b: 0.7019608, a: 1}
-      outline: {r: 0, g: 0.31764707, b: 1, a: 1}
-      accent: {r: 1, g: 0.29803923, b: 0.29803923, a: 1}
+    background: {r: 0.7637032, g: 1, b: 0.68235296, a: 1}
+    outline: {r: 0, g: 0, b: 0, a: 1}
+    accent: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  selected:
+    background: {r: 0.8156863, g: 0.99607843, b: 1, a: 1}
+    outline: {r: 1, g: 1, b: 1, a: 1}
+    accent: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  disabled:
+    background: {r: 1, g: 0.6650944, b: 0.6650944, a: 1}
+    outline: {r: 0, g: 0, b: 0, a: 1}
+    accent: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  selectedDisabled:
+    background: {r: 1, g: 1, b: 1, a: 1}
+    outline: {r: 0, g: 0, b: 0, a: 1}
+    accent: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  multiplier: 1
+  fadeDuration: 0.05

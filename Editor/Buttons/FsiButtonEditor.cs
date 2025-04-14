@@ -19,6 +19,7 @@ namespace Fsi.Ui.Buttons
         private SerializedProperty showSubmitIconProp;
         private SerializedProperty showOnSelectOnlyProp;
         private SerializedProperty submitIconProp;
+        private SerializedProperty submitActionProp;
         
         // Shortcut
         private SerializedProperty showShortcutIconProp;
@@ -37,15 +38,20 @@ namespace Fsi.Ui.Buttons
             root.Add(Spacer.Wide());
             
             #region Properties
+            
             colorPaletteProp = serializedObject.FindProperty("colorPalette");
             colorPaletteReferences = serializedObject.FindProperty("colorPaletteReferences");
+            
             inputTypeProp = serializedObject.FindProperty("inputType");
-            showSubmitIconProp = serializedObject.FindProperty("showSubmitIcon");
+            showSubmitIconProp = serializedObject.FindProperty("showSubmitPrompt");
             showOnSelectOnlyProp = serializedObject.FindProperty("showOnSelectOnly");
-            submitIconProp = serializedObject.FindProperty("submitIcon");
+            submitIconProp = serializedObject.FindProperty("submitPromptIcon");
+            submitActionProp = serializedObject.FindProperty("submitActionRef");
+            
             showShortcutIconProp = serializedObject.FindProperty("showShortcutIcon");
             shortcutActionReferenceProp = serializedObject.FindProperty("shortcutActionReference");
             shortcutIconProp = serializedObject.FindProperty("shortcutIcon");
+            
             #endregion
             
             #region Color Palette
@@ -88,8 +94,7 @@ namespace Fsi.Ui.Buttons
             
             showSubmitIconField.RegisterValueChangeCallback(evt =>
                                                             {
-                                                                showOnSelectOnlyField.enabledSelf
-                                                                    = showSubmitIconProp.boolValue;
+                                                                showOnSelectOnlyField.enabledSelf = showSubmitIconProp.boolValue;
                                                             });
 
             PropertyField submitIconField = new(submitIconProp);

@@ -330,17 +330,6 @@
                 },
                 {
                     "name": "",
-                    "id": "7b0b57a4-bbee-49de-a32a-ef3f723d4f1c",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Steam",
-                    "action": "Submit",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "f615750b-de77-491d-a209-b1fd30de732b",
                     "path": "<DualShockGamepad>/buttonSouth",
                     "interactions": "",

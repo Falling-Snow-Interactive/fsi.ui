@@ -1,30 +1,18 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Fsi.Ui.ColorPalettes;
-using Fsi.Ui.ColorPalettes.Animation.Timing;
 using Fsi.Ui.Inputs;
 using Fsi.Ui.Inputs.Settings;
-using Fsi.Ui.Inputs.Ui;
-using UnityEditor;
+using Fsi.Ui.Inputs.Ui.Prompts;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
-using Object = UnityEngine.Object;
 
 namespace Fsi.Ui.Buttons
 {
-    public abstract class FsiButton : Button //, 
-                                      // ISubmitHandler, ISelectHandler, IDeselectHandler, // Input
-                                      // IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, // Pointer
-                                      // IMoveHandler
+    public abstract class FsiButton : Button
     {
-        protected bool IsSelected
+        private bool IsSelected
         {
             get
             {
@@ -51,13 +39,16 @@ namespace Fsi.Ui.Buttons
         private InputType inputType = InputType.SteamDeck;
 
         [SerializeField]
-        private bool showSubmitIcon = true;
-
+        private bool showSubmitPrompt = true;
+        
         [SerializeField]
         private bool showOnSelectOnly = true;
-
+        
         [SerializeField]
-        protected InputIcon submitIcon;
+        protected InputIcon submitPromptIcon;
+        
+        [SerializeField]
+        private InputActionReference submitActionRef;
         
         // Input Shortcut
         
@@ -65,7 +56,7 @@ namespace Fsi.Ui.Buttons
         private bool showShortcutIcon = false;
 
         [SerializeField] 
-        private InputActionReference shortcutActionReference;
+        private InputActionReference shortcutActionRef;
         private InputAction shortcutAction;
         
         [SerializeField]
@@ -75,66 +66,53 @@ namespace Fsi.Ui.Buttons
         
         protected new virtual void OnValidate()
         {
-            UiSettings.Log("FSI Button: OnValidate");
+            UiSettings.LogEvent("FSI Button: OnValidate");
             base.OnValidate();
-            
-            // Do something... 
-            if (shortcutIcon)
+
+            if (submitPromptIcon)
             {
-                shortcutIcon.actionReference = shortcutActionReference;
-                shortcutIcon.type = inputType;
-                shortcutIcon.Refresh();
+                submitPromptIcon.gameObject.SetActive(showSubmitPrompt);
+                submitPromptIcon.SetBinding(inputType, submitActionRef);
             }
 
-            if (submitIcon)
+            if (shortcutIcon)
             {
-                submitIcon.type = inputType;
-                submitIcon.Refresh();
+                shortcutIcon.gameObject.SetActive(showShortcutIcon);
+                shortcutIcon.SetBinding(inputType, shortcutActionRef);
             }
-            
-            Refresh();
         }
 
         protected new virtual void Awake()
         {
-            UiSettings.Log("FSI Button: Awake");
+            UiSettings.LogEvent("FSI Button: Awake");
             base.Awake();
             
-            // Do something... 
-            
-            if (shortcutActionReference)
+            if (shortcutActionRef)
             {
-                shortcutIcon.actionReference = shortcutActionReference;
-                shortcutAction = shortcutActionReference.ToInputAction();
+                shortcutAction = shortcutActionRef.ToInputAction();
             }
         }
 
         protected new virtual void OnEnable()
         {
-            Debug.Log("FSI Button: OnEnable");
+            UiSettings.LogEvent("FSI Button: OnEnable");
             base.OnEnable();
             
             // Do something... 
 
             InputController.InputChanged += OnInputChanged;
             
-            Refresh();
-
             if (shortcutAction != null)
             {
                 shortcutAction.performed += OnShortcut;
                 shortcutAction.Enable();
             }
-            
-            // StatusChanged?.Invoke();
         }
 
         protected new virtual void OnDisable()
         {
-            Debug.Log("FSI Button: OnDisable");
+            UiSettings.LogEvent("FSI Button: OnDisable");
             base.OnDisable();
-            
-            // Do something... 
 
             InputController.InputChanged -= OnInputChanged;
             
@@ -143,8 +121,6 @@ namespace Fsi.Ui.Buttons
                 shortcutAction.performed -= OnShortcut;
                 shortcutAction.Disable();
             }
-            
-            // StatusChanged?.Invoke();
         }
 
         #endregion
@@ -154,6 +130,16 @@ namespace Fsi.Ui.Buttons
         private void OnInputChanged()
         {
             inputType = InputController.Instance.InputType;
+            UiSettings.Log($"Setting button prompts to: {inputType}");
+            if (submitPromptIcon)
+            {
+                submitPromptIcon.SetBinding(inputType, submitActionRef);
+            }
+
+            if (shortcutIcon)
+            {
+                shortcutIcon.SetBinding(inputType, shortcutActionRef);
+            }
         }
         
         #endregion
@@ -164,8 +150,6 @@ namespace Fsi.Ui.Buttons
         {
             UiSettings.Log("FSI Button: OnShortcut", gameObject);
             base.OnSelect(null);
-            
-            Refresh();
         }
         
         #endregion
@@ -176,10 +160,8 @@ namespace Fsi.Ui.Buttons
         
         public override void OnSubmit(BaseEventData evt)
         {
-            UiSettings.Log($"FSI Button: OnSubmit ({name})", gameObject);
+            UiSettings.LogEvent($"FSI Button: OnSubmit ({name})", gameObject);
             base.OnSubmit(evt);
-            
-            Refresh();
         }
         
         #endregion
@@ -188,12 +170,9 @@ namespace Fsi.Ui.Buttons
         
         public override void OnSelect(BaseEventData evt)
         {
-            UiSettings.Log($"FSI Button: OnSelect ({name})", gameObject);
+            UiSettings.LogEvent($"FSI Button: OnSelect ({name})", gameObject);
             base.OnSelect(evt);
-            
-            ApplyPalette(ColorPalette, colorPalette.Selected.Buttons);
-            
-            // Refresh();
+            // colorPaletteReferences.SetColor(ColorPalette.Color, ColorPalette.Selected, ColorPalette.Multiplier, ColorPalette.FadeDuration);
         }
         
         #endregion
@@ -202,12 +181,8 @@ namespace Fsi.Ui.Buttons
 
         public override void OnDeselect(BaseEventData evt)
         {
-            UiSettings.Log($"FSI Button: OnDeselect ({name})", gameObject);
+            UiSettings.LogEvent($"FSI Button: OnDeselect ({name})", gameObject);
             base.OnDeselect(evt);
-            
-            // ApplyPalette(ColorPalette, colorPalette.Selected.Buttons);
-            
-            // Refresh();
         }
         
         #endregion
@@ -216,12 +191,9 @@ namespace Fsi.Ui.Buttons
 
         public override void OnPointerEnter(PointerEventData evt)
         {
-            UiSettings.Log($"FSI Button: OnPointerEnter ({name})", gameObject);
+            UiSettings.LogEvent($"FSI Button: OnPointerEnter ({name})", gameObject);
             base.OnPointerEnter(evt);
-            
-            ApplyPalette(ColorPalette, colorPalette.Selected.Buttons);
-            
-            // Refresh();
+            // EventSystem.current.SetSelectedGameObject(gameObject);
         }
         
         #endregion
@@ -230,10 +202,9 @@ namespace Fsi.Ui.Buttons
         
         public override void OnPointerExit(PointerEventData evt)
         {
-            UiSettings.Log($"FSI Button: OnPointerExit ({name})", gameObject);
+            UiSettings.LogEvent($"FSI Button: OnPointerExit ({name})", gameObject);
             base.OnPointerExit(evt);
-            
-            // Refresh();
+            // EventSystem.current.SetSelectedGameObject(null);
         }
         
         #endregion
@@ -242,98 +213,38 @@ namespace Fsi.Ui.Buttons
         
         public override void OnPointerClick(PointerEventData eventData)
         {
-            UiSettings.Log($"FSI Button: OnPointerClick ({name})", gameObject);
+            UiSettings.LogEvent($"FSI Button: OnPointerClick ({name})", gameObject);
             base.OnPointerClick(eventData);
-            
-            ApplyPalette(ColorPalette, colorPalette.Pressed.Buttons);
-            
-            Refresh();
         }
         
         #endregion
 
         #endregion
-        
-        #region Refresh
-        
-        private void Refresh()
+
+        protected override void DoStateTransition(SelectionState state, bool instant)
         {
-            RefreshInputIcons();
-            // RefreshColors();
-        }
-        
-        private void RefreshInputIcons()
-        {
-            if (shortcutIcon)
-            {
-                shortcutIcon.gameObject.SetActive(showShortcutIcon && shortcutAction != null);
-            }
+            UiSettings.LogEvent($"FSI Button: DoStateTransition ({name})", gameObject);
+            base.DoStateTransition(state, instant);
             
-            if (submitIcon)
-            {
-                if (showSubmitIcon)
-                {
-                    submitIcon.gameObject.SetActive(!showOnSelectOnly 
-                                                    || currentSelectionState == SelectionState.Selected 
-                                                    || currentSelectionState == SelectionState.Highlighted);
-                }
-                else
-                {
-                    submitIcon.gameObject.SetActive(false);
-                }
-            }
+            Color c = ColorPalette.Color;
+
+            ColorGroup group = state switch
+                               {
+                                   SelectionState.Normal => ColorPalette.Normal,
+                                   SelectionState.Highlighted => ColorPalette.Highlighted,
+                                   SelectionState.Pressed => ColorPalette.Pressed,
+                                   SelectionState.Selected => ColorPalette.Selected,
+                                   SelectionState.Disabled => IsSelected
+                                                                  ? ColorPalette.SelectedDisabled
+                                                                  : ColorPalette.Disabled,
+                                   _ => throw new ArgumentOutOfRangeException()
+                               };
+
+            colorPaletteReferences.SetColor(c, group, ColorPalette.Multiplier, ColorPalette.FadeDuration);
+            submitPromptIcon?.ColorPaletteReferences.SetColor(ColorPalette.Color, 
+                                                              ColorPalette.Normal, 
+                                                              ColorPalette.Multiplier,
+                                                              ColorPalette.FadeDuration);
         }
-        
-        // private void RefreshColors()
-        // {
-        //     ColorPaletteMultipliers multipliers = GetColorProperties().Buttons;
-        //     ApplyPalette(ColorPalette, multipliers);
-        // }
-
-        private ColorProperties GetColorProperties()
-        {
-            return currentSelectionState switch
-                   {
-                       SelectionState.Normal => ColorPalette.Normal,
-                       SelectionState.Highlighted => ColorPalette.Selected,
-                       SelectionState.Pressed => ColorPalette.Pressed,
-                       SelectionState.Selected => ColorPalette.Selected,
-                       SelectionState.Disabled => IsSelected ? ColorPalette.DisabledSelected : ColorPalette.Disabled,
-                       _ => throw new ArgumentOutOfRangeException()
-                   };
-        }
-        
-        #endregion
-        
-        #region Visuals
-
-        private void ApplyPalette(ColorPalette palette, ColorPaletteMultipliers modifiers)
-        {
-            foreach (Graphic background in colorPaletteReferences.Backgrounds)
-            {
-                Color c = palette.GetColor(modifiers.Background);
-                background.color = c;
-            }
-
-            foreach (Graphic outline in colorPaletteReferences.Outlines)
-            {
-                Color c = palette.GetColor(modifiers.Outline);
-                outline.color = c;
-            }
-
-            foreach (Graphic accent in colorPaletteReferences.Accents)
-            {
-                Color c = palette.GetColor(modifiers.Accent);
-                accent.color = c;
-            }
-            
-            colorPaletteReferences.ApplyPalette(palette, modifiers);
-            if (submitIcon)
-            {
-                submitIcon.ColorPaletteReferences?.ApplyPalette(palette, modifiers);
-            }
-        }
-        
-        #endregion
     }
 }

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fsi.Ui.ColorPalettes
 {
@@ -8,31 +7,39 @@ namespace Fsi.Ui.ColorPalettes
     {
         [SerializeField]
         private Color color = Color.white;
-        
-        [SerializeField]
-        private ColorProperties normal;
-        public ColorProperties Normal => normal;
+        public Color Color => color;
 
         [SerializeField]
-        private ColorProperties selected;
-        public ColorProperties Selected => selected;
+        private ColorGroup normal;
+        public ColorGroup Normal => normal;
 
         [SerializeField]
-        private ColorProperties disabled;
-        public ColorProperties Disabled => disabled;
-        
-        [SerializeField]
-        private ColorProperties pressed;
-        public ColorProperties Pressed => pressed;
-        
-        [SerializeField]
-        private ColorProperties disabledSelected;
-        public ColorProperties DisabledSelected => disabledSelected;
+        private ColorGroup highlighted;
+        public ColorGroup Highlighted => highlighted;
 
-        public Color GetColor(Color modifier)
-        {
-            Color c = color * modifier;
-            return c;
-        }
+        [SerializeField]
+        private ColorGroup pressed;
+        public ColorGroup Pressed => pressed;
+
+        [SerializeField]
+        private ColorGroup selected;
+        public ColorGroup Selected => selected;
+
+        [SerializeField]
+        private ColorGroup disabled;
+        public ColorGroup Disabled => disabled;
+
+        [SerializeField]
+        private ColorGroup selectedDisabled;
+        public ColorGroup SelectedDisabled => selectedDisabled;
+
+        [Range(1, 5)]
+        [SerializeField]
+        private float multiplier = 1.0f;
+        public float Multiplier => multiplier;
+
+        [SerializeField]
+        private float fadeDuration = 0.05f;
+        public float FadeDuration => fadeDuration;
     }
 }
