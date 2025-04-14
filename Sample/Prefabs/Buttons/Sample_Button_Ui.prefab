@@ -90,11 +90,11 @@ MonoBehaviour:
     outlines:
     - {fileID: 5041315060522233996}
     accents: []
-  inputType: 1
+  inputType: 2
   showSubmitPrompt: 1
   showOnSelectOnly: 1
   submitPromptIcon: {fileID: 5473811207191043489}
-  submitActionRef: {fileID: 0}
+  submitActionRef: {fileID: 392368643174621059, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   showShortcutIcon: 0
   shortcutActionRef: {fileID: 0}
   shortcutIcon: {fileID: 5739598513964765433}
@@ -588,6 +588,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6511759323689193632}
     m_Modifications:
+    - target: {fileID: 90187628568616841, guid: ebd8019597cb3431f99ff3ab2f897060, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 228887577300610397, guid: ebd8019597cb3431f99ff3ab2f897060, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -603,6 +607,10 @@ PrefabInstance:
     - target: {fileID: 228887577300610397, guid: ebd8019597cb3431f99ff3ab2f897060, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4321698250572048817, guid: ebd8019597cb3431f99ff3ab2f897060, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4509972260232513169, guid: ebd8019597cb3431f99ff3ab2f897060, type: 3}
       propertyPath: m_AnchorMax.x
@@ -623,6 +631,10 @@ PrefabInstance:
     - target: {fileID: 4613043690771714377, guid: ebd8019597cb3431f99ff3ab2f897060, type: 3}
       propertyPath: m_Name
       value: Input_Icon_Ui_Submit
+      objectReference: {fileID: 0}
+    - target: {fileID: 4613043690771714377, guid: ebd8019597cb3431f99ff3ab2f897060, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7036821881912891809, guid: ebd8019597cb3431f99ff3ab2f897060, type: 3}
       propertyPath: m_Pivot.x
@@ -703,6 +715,14 @@ PrefabInstance:
     - target: {fileID: 7036821881912891809, guid: ebd8019597cb3431f99ff3ab2f897060, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744720789558066712, guid: ebd8019597cb3431f99ff3ab2f897060, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1121080933, guid: a09f06fd4a5224e25a2f65120a13d6f9, type: 3}
+    - target: {fileID: 8493613414278607360, guid: ebd8019597cb3431f99ff3ab2f897060, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

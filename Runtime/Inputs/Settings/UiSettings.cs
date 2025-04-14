@@ -1,6 +1,7 @@
 using Fsi.Ui.Inputs.Informations;
 using UnityEditor;
 using UnityEngine;
+using Logger = fsi.settings.Logging.Logger;
 
 namespace Fsi.Ui.Inputs.Settings
 {
@@ -43,17 +44,8 @@ namespace Fsi.Ui.Inputs.Settings
         
         // Debugging
         [SerializeField]
-        private bool logs = false;
+        private Logger logger;
         
-        [SerializeField]
-        private bool warnings = false;
-        
-        [SerializeField]
-        private bool errors = false;
-        
-        [SerializeField]
-        private bool events = false;
-
         #region Settings
 
         public static UiSettings GetOrCreateSettings()
@@ -91,40 +83,10 @@ namespace Fsi.Ui.Inputs.Settings
 
         #endregion
         
-        #region Logging
-        
-        public static void Log(string message, GameObject gameObject = null)
-        {
-            if (Settings.logs)
-            {
-                Debug.Log($"Ui | {message}", gameObject);
-            }
-        }
+        #region logging
 
-        public static void LogWarning(string message, GameObject gameObject = null)
-        {
-            if (Settings.warnings)
-            {
-                Debug.LogWarning($"Ui | {message}", gameObject);
-            }
-        }
+        public static Logger Logger => Settings.logger;
 
-        public static void LogError(string message, GameObject gameObject = null)
-        {
-            if (Settings.errors)
-            {
-                Debug.LogError($"Ui | {message}", gameObject);
-            }
-        }
-
-        public static void LogEvent(string message, GameObject gameObject = null)
-        {
-            if (Settings.events)
-            {
-                Debug.Log($"Ui | {message}", gameObject);
-            }
-    }
-        
         #endregion
     }
 }

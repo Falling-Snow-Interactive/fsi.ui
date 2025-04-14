@@ -38,5 +38,23 @@ namespace Fsi.Ui.ColorPalettes
                 a.CrossFadeColor(accent, duration, true, true);
             }
         }
+
+        public void SetVisible(bool set)
+        {
+            foreach (Graphic b in backgrounds)
+            {
+                b.gameObject.SetActive(set);
+            }
+
+            foreach (Graphic o in outlines)
+            {
+                o.gameObject.SetActive(set);
+            }
+
+            foreach (Graphic a in accents)
+            {
+                a.gameObject.SetActive(set);
+            }
+        }
     }
 }

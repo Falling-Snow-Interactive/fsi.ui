@@ -2,11 +2,12 @@ using System;
 using Fsi.Gameplay;
 using Fsi.Ui.Inputs.Settings;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Fsi.Ui.Inputs
 {
-    public class InputController : MbSingleton<InputController>
+    public class InputController : MbSingleton<InputController>, IMoveHandler
     {
         public static event Action InputChanged;
         
@@ -14,6 +15,9 @@ namespace Fsi.Ui.Inputs
         private PlayerInput playerInput;
         
         public InputType InputType { get; private set; }
+        
+        [SerializeField]
+        private bool resetSelectionWhenNull = true;
 
         protected override void Awake()
         {
@@ -39,7 +43,7 @@ namespace Fsi.Ui.Inputs
         private void OnControlsChanged(PlayerInput _)
         {
             string scheme = playerInput.currentControlScheme;
-            UiSettings.Log($"OnControlsChanged: {scheme}", gameObject);
+            UiSettings.Logger.Warning($"OnControlsChanged: {scheme}", gameObject);
             InputType = scheme switch
                                       {
                                           "Keyboard & Mouse" => InputType.MouseKeyboard,
@@ -53,6 +57,14 @@ namespace Fsi.Ui.Inputs
                                       };
 
             InputChanged?.Invoke();
+        }
+        
+        public void OnMove(AxisEventData eventData)
+        {
+            if (resetSelectionWhenNull && EventSystem.current)
+            {
+                EventSystem.current?.SetSelectedGameObject(EventSystem.current.firstSelectedGameObject);
+            }
         }
     }
 }

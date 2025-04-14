@@ -71,21 +71,9 @@ namespace Fsi.Ui.Settings
             Label debugLabel = LabelUtility.Section("Debugging");
             debugContainer.Add(debugLabel);
             
-            SerializedProperty logProp = settingsProp.FindProperty("logs");
-            PropertyField logField = new(logProp){ label = "Logs" };
+            SerializedProperty logProp = settingsProp.FindProperty("logger");
+            PropertyField logField = new(logProp){ label = "Logger" };
             debugContainer.Add(logField);
-            
-            SerializedProperty warningProp = settingsProp.FindProperty("warnings");
-            PropertyField warningField = new(warningProp){ label = "Warnings" };
-            debugContainer.Add(warningField);
-            
-            SerializedProperty errorProp = settingsProp.FindProperty("errors");
-            PropertyField errorField = new(errorProp){ label = "Errors" };
-            debugContainer.Add(errorField);
-            
-            SerializedProperty eventsProp = settingsProp.FindProperty("events");
-            PropertyField eventsField = new(eventsProp){ label = "Events" };
-            debugContainer.Add(eventsField);
             
             scrollView.Add(Spacer.Wide());
             

@@ -23,7 +23,7 @@ namespace Fsi.Ui.Buttons
         
         // Shortcut
         private SerializedProperty showShortcutIconProp;
-        private SerializedProperty shortcutActionReferenceProp;
+        private SerializedProperty shortcutActionProp;
         private SerializedProperty shortcutIconProp;
         
         public override VisualElement CreateInspectorGUI()
@@ -49,7 +49,7 @@ namespace Fsi.Ui.Buttons
             submitActionProp = serializedObject.FindProperty("submitActionRef");
             
             showShortcutIconProp = serializedObject.FindProperty("showShortcutIcon");
-            shortcutActionReferenceProp = serializedObject.FindProperty("shortcutActionReference");
+            shortcutActionProp = serializedObject.FindProperty("shortcutActionRef");
             shortcutIconProp = serializedObject.FindProperty("shortcutIcon");
             
             #endregion
@@ -71,26 +71,26 @@ namespace Fsi.Ui.Buttons
             
             #endregion
             
-            #region Input
+            #region Prompt
 
-            Foldout inputFold = new() { text = "Input", value = EditorPrefs.GetBool("FsiButton.InputFold")};
-            inputFold.RegisterValueChangedCallback(evt =>
-                                                   {
-                                                       EditorPrefs.SetBool("FsiButton.InputFold", inputFold.value);
-                                                   });
-            root.Add(inputFold);
+            Foldout promptFold = new() { text = "Prompt", value = EditorPrefs.GetBool("FsiButton.PromptFold")};
+            promptFold.RegisterValueChangedCallback(evt =>
+                                                    {
+                                                        EditorPrefs.SetBool("FsiButton.PromptFold", promptFold.value);
+                                                    });
+            root.Add(promptFold);
             
             PropertyField inputTypeField = new(inputTypeProp);
-            inputFold.Add(inputTypeField);
+            promptFold.Add(inputTypeField);
             
             PropertyField showSubmitIconField = new(showSubmitIconProp);
-            inputFold.Add(showSubmitIconField);
+            promptFold.Add(showSubmitIconField);
             
             PropertyField showOnSelectOnlyField = new(showOnSelectOnlyProp)
                                                   {
                                                       enabledSelf = showSubmitIconProp.boolValue,
                                                   };
-            inputFold.Add(showOnSelectOnlyField);
+            promptFold.Add(showOnSelectOnlyField);
             
             showSubmitIconField.RegisterValueChangeCallback(evt =>
                                                             {
@@ -98,7 +98,10 @@ namespace Fsi.Ui.Buttons
                                                             });
 
             PropertyField submitIconField = new(submitIconProp);
-            inputFold.Add(submitIconField);
+            promptFold.Add(submitIconField);
+            
+            PropertyField submitActionField = new(submitActionProp);
+            promptFold.Add(submitActionField);
             
             #endregion
             
@@ -114,8 +117,8 @@ namespace Fsi.Ui.Buttons
             PropertyField showShortcutIconField = new(showShortcutIconProp);
             shortcutFold.Add(showShortcutIconField);
             
-            PropertyField shortcutActionReferenceField = new(shortcutActionReferenceProp);
-            shortcutFold.Add(shortcutActionReferenceField);
+            PropertyField shortcutActionField = new(shortcutActionProp);
+            shortcutFold.Add(shortcutActionField);
             
             PropertyField shortcutIconField = new(shortcutIconProp);
             shortcutFold.Add(shortcutIconField);
