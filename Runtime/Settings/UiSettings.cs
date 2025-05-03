@@ -1,9 +1,8 @@
-using Fsi.Ui.Inputs.Informations;
+using Fsi.Ui.Settings.SchemeInformations;
 using UnityEditor;
 using UnityEngine;
-using Logger = fsi.settings.Logging.Logger;
 
-namespace Fsi.Ui.Inputs.Settings
+namespace Fsi.Ui.Settings
 {
     public class UiSettings : ScriptableObject
     {
@@ -12,43 +11,14 @@ namespace Fsi.Ui.Inputs.Settings
 
         private static UiSettings _settings;
         public static UiSettings Settings => _settings ??= GetOrCreateSettings();
-        
-        // Icons
-        [SerializeField]
-        private PromptInformationGroup xbox;
-        public PromptInformationGroup Xbox => xbox;
-        
-        [SerializeField]
-        private PromptInformationGroup playStation;
-        public PromptInformationGroup PlayStation => playStation;
 
         [SerializeField]
-        private PromptInformationGroup switchPro;
-        public PromptInformationGroup SwitchPro => switchPro;
-        
-        [SerializeField]
-        private PromptInformationGroup switchJoy;
-        public PromptInformationGroup SwitchJoy => switchJoy;
-
-        [SerializeField]
-        private PromptInformationGroup steam;
-        public PromptInformationGroup Steam => steam;
-
-        [SerializeField]
-        private PromptInformationGroup mouseKeyboard;
-        public PromptInformationGroup MouseKeyboard => mouseKeyboard;
-
-        [SerializeField]
-        private PromptInformationGroup touch;
-        public PromptInformationGroup Touch => touch;
-        
-        // Debugging
-        [SerializeField]
-        private Logger logger;
+        private SchemeInformationGroup schemeInformation;
+        public SchemeInformationGroup SchemeInformation => schemeInformation;
         
         #region Settings
 
-        public static UiSettings GetOrCreateSettings()
+        private static UiSettings GetOrCreateSettings()
         {
             UiSettings settings = Resources.Load<UiSettings>(ResourcePath);
 
@@ -75,17 +45,12 @@ namespace Fsi.Ui.Inputs.Settings
         }
 
         #if UNITY_EDITOR
+        
         public static SerializedObject GetSerializedSettings()
         {
             return new(GetOrCreateSettings());
         }
         #endif
-
-        #endregion
-        
-        #region logging
-
-        public static Logger Logger => Settings.logger;
 
         #endregion
     }

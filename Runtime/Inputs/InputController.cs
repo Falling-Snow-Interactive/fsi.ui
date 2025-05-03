@@ -1,6 +1,7 @@
 using System;
 using Fsi.Gameplay;
-using Fsi.Ui.Inputs.Settings;
+using Fsi.Ui.Settings;
+using Fsi.Ui.Settings.SchemeInformations;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -43,20 +44,17 @@ namespace Fsi.Ui.Inputs
         private void OnControlsChanged(PlayerInput _)
         {
             string scheme = playerInput.currentControlScheme;
-            UiSettings.Logger.Warning($"OnControlsChanged: {scheme}", gameObject);
-            InputType = scheme switch
-                                      {
-                                          "Keyboard & Mouse" => InputType.MouseKeyboard,
-                                          "Steam" => InputType.SteamDeck,
-                                          "Xbox" => InputType.Xbox,
-                                          "PlayStation" => InputType.PlayStation,
-                                          "SwitchPro" => InputType.Nintendo,
-                                          "SwitchJoy" => InputType.Nintendo,
-                                          "Touch" => InputType.Touch,
-                                          _ => throw new ArgumentOutOfRangeException()
-                                      };
+            // UiSettings.Logger.Warning($"OnControlsChanged: {scheme}", gameObject);
 
-            InputChanged?.Invoke();
+            foreach (SchemeInformation info in UiSettings.Settings.SchemeInformation.Information)
+            {
+                if (scheme == info.Type)
+                {
+                    InputType = info.Input;
+                    InputChanged?.Invoke();
+                    break;
+                }
+            }
         }
         
         public void OnMove(AxisEventData eventData)
