@@ -1,71 +1,63 @@
 using System;
 using Fsi.Ui.ColorPalettes;
 using Fsi.Ui.Inputs.Informations;
+using Fsi.Ui.Inputs.Settings;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Utilities;
 using UnityEngine.UI;
-using InputSettings = Fsi.Ui.Inputs.Settings.InputSettings;
 
 namespace Fsi.Ui.Inputs.Ui.Prompts
 {
     public class InputIcon : MonoBehaviour
     {
-        private InputActionReference actionRef;
-        
         [Header("References")]
         
         [SerializeField]
         private Image icon;
-
+        
         [SerializeField]
         private ColorPaletteReferences colorPaletteReferences;
         public ColorPaletteReferences ColorPaletteReferences => colorPaletteReferences;
 
-        private void OnEnable()
+        public void SetBinding(InputType type, InputActionReference inputActionReference)
         {
-            if (actionRef)
-            {
-                SetBinding(InputController.Instance.InputType, actionRef);
-            }
-        }
-
-        public void SetBinding(InputType type, InputActionReference inputActionRef)
-        {
-            this.actionRef = inputActionRef;
-            if (InputSettings.Settings)
+            if (UiSettings.Settings)
             {
                 PromptInformationGroup promptInfo = type switch
                                                          {
-                                                             InputType.MouseKeyboard => InputSettings.Settings.MouseKeyboard,
-                                                             InputType.SteamDeck => InputSettings.Settings.Steam,
-                                                             InputType.Xbox => InputSettings.Settings.Xbox,
-                                                             InputType.PlayStation => InputSettings.Settings.PlayStation,
-                                                             InputType.Nintendo => InputSettings.Settings.SwitchPro,
-                                                             InputType.Touch => InputSettings.Settings.Touch,
+                                                             InputType.MouseKeyboard => UiSettings.Settings.MouseKeyboard,
+                                                             InputType.SteamDeck => UiSettings.Settings.Steam,
+                                                             InputType.Xbox => UiSettings.Settings.Xbox,
+                                                             InputType.PlayStation => UiSettings.Settings.PlayStation,
+                                                             InputType.Nintendo => UiSettings.Settings.SwitchPro,
+                                                             InputType.Touch => UiSettings.Settings.Touch,
                                                              _ => throw new ArgumentOutOfRangeException()
                                                          };
                 
-                if (icon != null && inputActionRef != null)
+                if (icon && inputActionReference)
                 {
-                    foreach (InputBinding binding in inputActionRef.action.bindings)
+                    foreach (InputBinding binding in inputActionReference.action.bindings)
                     {
                         if (promptInfo.TryGetInformation(binding.path, out UiInputInformation info))
                         {
-                            icon.sprite = info.Sprite;
+                            colorPaletteReferences?.SetVisible(true);
+                            icon.gameObject.SetActive(true);
+                            icon.sprite =info.Sprite;
                             return;
                         }
                         // TODO - Eventually this should be expanded to support multiple inputs for the same action.
                         // eg: Keyboard can submit Ui elements with space or enter, but only space is shown.
                     }
 
-                    InputSettings.Logger.Warning("No input binding found for prompt", gameObject);
+                    UiSettings.Logger.Warning("No input binding found for prompt", gameObject);
+                    colorPaletteReferences?.SetVisible(false);
                     icon.sprite = null;
+                    icon.gameObject.SetActive(false);
                 }
             }
             else
             {
-                InputSettings.Logger.Error("Cannot find ui settings.");
+                UiSettings.Logger.Error("Cannot find ui settings.");
             }
         }
     }

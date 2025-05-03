@@ -1,76 +1,60 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Fsi.Ui.ColorPalettes
 {
-    public class ColorPaletteReferences : MonoBehaviour
+    [Serializable]
+    public class ColorPaletteReferences
     {
         [SerializeField]
         private List<Graphic> backgrounds = new();
         
-        [FormerlySerializedAs("outlxines")]
-        [FormerlySerializedAs("outlines")]
         [SerializeField]
-        private List<Graphic> primaryAccents = new();
+        private List<Graphic> outlines = new();
         
-        [FormerlySerializedAs("accents")]
         [SerializeField]
-        private List<Graphic> secondaryAccents = new();
+        private List<Graphic> accents = new();
         
-        [FormerlySerializedAs("primaryTexts")]
-        [SerializeField]
-        private List<Graphic> titleTexts = new();
-        
-        [FormerlySerializedAs("secondaryTexts")]
-        [SerializeField]
-        private List<Graphic> headingTexts = new();
-        
-        [FormerlySerializedAs("tertiaryTexts")]
-        [SerializeField]
-        private List<Graphic> bodyTexts = new();
-
-        private List<Graphic> allGraphics;
-        
-        public void ApplyPalette(ColorGroup group, float duration)
+        public void SetColor(Color color, ColorGroup group, float multiplier, float duration)
         {
-            ApplyToGraphics(group.Background, backgrounds, duration);
-            ApplyToGraphics(group.PrimaryAccent, primaryAccents, duration);
-            ApplyToGraphics(group.SecondaryAccent, secondaryAccents, duration);
-            ApplyToGraphics(group.Title, titleTexts, duration);
-            ApplyToGraphics(group.Heading, headingTexts, duration);
-            ApplyToGraphics(group.Body, bodyTexts, duration);
-        }
-        
-        private void ApplyToGraphics(Color color, List<Graphic> graphics, float duration)
-        {
-            foreach (Graphic g in graphics)
+            Color background = color * (group.Background * multiplier);
+            Color outline = color * (group.Outline * multiplier);
+            Color accent = color * (group.Accent * multiplier);
+            
+            foreach (Graphic b in backgrounds)
             {
-                if (g)
-                {
-                    g.CrossFadeColor(color, duration, true, true);
-                }
+                b.CrossFadeColor(background, duration, true, true);
+            }
+
+            foreach (Graphic o in outlines)
+            {
+                o.CrossFadeColor(outline, duration, true, true);
+            }
+
+            foreach (Graphic a in accents)
+            {
+                a.CrossFadeColor(accent, duration, true, true);
             }
         }
 
         public void SetVisible(bool set)
         {
-            allGraphics ??= new();
-            allGraphics.AddRange(backgrounds);
-            allGraphics.AddRange(primaryAccents);
-            allGraphics.AddRange(secondaryAccents);
-            allGraphics.AddRange(titleTexts);
-            allGraphics.AddRange(headingTexts);
-            allGraphics.AddRange(bodyTexts);
-
-            foreach (Graphic g in allGraphics)
+            foreach (Graphic b in backgrounds)
             {
-                if (g)
-                {
-                    g.gameObject.SetActive(set);
-                }
-            } 
+                b.gameObject.SetActive(set);
+            }
+
+            foreach (Graphic o in outlines)
+            {
+                o.gameObject.SetActive(set);
+            }
+
+            foreach (Graphic a in accents)
+            {
+                a.gameObject.SetActive(set);
+            }
         }
     }
 }
