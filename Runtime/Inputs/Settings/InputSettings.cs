@@ -5,13 +5,17 @@ using Logger = fsi.settings.Logging.Logger;
 
 namespace Fsi.Ui.Inputs.Settings
 {
-    public class UiSettings : ScriptableObject
+    [CreateAssetMenu(fileName = "InputSettings", menuName = "Fsi/Settings/InputSettings")]
+    public class InputSettings : ScriptableObject
     {
-        private const string ResourcePath = "Settings/UiSettings";
-        private const string FullPath = "Assets/Resources/" + ResourcePath + ".asset";
+        private const string AssetName = "InputSettings";
+        private const string ResourcePath = $"Settings/{AssetName}";
+        private const string FullPath = $"Assets/Resources/{ResourcePath}.asset";
+        // private const string FolderPath = "Packages/com.fallingsnowinteractive.ui/Assets/Config";
+        // private const string FilePath = $"{FolderPath}/{AssetName}.asset";
 
-        private static UiSettings _settings;
-        public static UiSettings Settings => _settings ??= GetOrCreateSettings();
+        private static InputSettings _settings;
+        public static InputSettings Settings => _settings ??= GetOrCreateSettings();
         
         // Icons
         [SerializeField]
@@ -48,25 +52,16 @@ namespace Fsi.Ui.Inputs.Settings
         
         #region Settings
 
-        public static UiSettings GetOrCreateSettings()
+        public static InputSettings GetOrCreateSettings()
         {
-            UiSettings settings = Resources.Load<UiSettings>(ResourcePath);
+            // InputSettings settings = AssetDatabase.LoadAssetAtPath<InputSettings>(FilePath);
+            InputSettings settings = Resources.Load<InputSettings>(ResourcePath);
 
             #if UNITY_EDITOR
             if (!settings)
             {
-                if (!AssetDatabase.IsValidFolder("Assets/Resources"))
-                {
-                    AssetDatabase.CreateFolder("Assets", "Resources");
-                }
-
-                if (!AssetDatabase.IsValidFolder("Assets/Resources/Settings"))
-                {
-                    AssetDatabase.CreateFolder("Assets/Resources", "Settings");
-                }
-
-                settings = CreateInstance<UiSettings>();
-                AssetDatabase.CreateAsset(settings, FullPath);
+                settings = CreateInstance<InputSettings>();
+                AssetDatabase.CreateAsset(settings, ResourcePath);
                 AssetDatabase.SaveAssets();
             }
             #endif

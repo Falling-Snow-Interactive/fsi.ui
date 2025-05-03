@@ -352,7 +352,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shapes_Spritesheet_Square_
+      name: Shapes_Spritesheet_Square_5
       rect:
         serializedVersion: 2
         x: 1280
@@ -664,11 +664,11 @@ TextureImporter:
       Shapes_Spritesheet_Circle_4: -1733966583
       Shapes_Spritesheet_Circle_5: -1348611200
       Shapes_Spritesheet_Square: -1099251891
-      Shapes_Spritesheet_Square_: -1497341879
       Shapes_Spritesheet_Square_1: -561977195
       Shapes_Spritesheet_Square_2: 522040666
       Shapes_Spritesheet_Square_3: -41525162
       Shapes_Spritesheet_Square_4: -133904203
+      Shapes_Spritesheet_Square_5: -1497341879
       Shapes_Spritesheet_Square_Rounded: 996102912
       Shapes_Spritesheet_Square_Rounded_1: 1969029551
       Shapes_Spritesheet_Square_Rounded_2: -1655854846

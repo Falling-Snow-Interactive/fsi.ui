@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using Fsi.Gameplay;
-using Fsi.Ui.Inputs.Settings;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using InputSettings = Fsi.Ui.Inputs.Settings.InputSettings;
 
 namespace Fsi.Ui.Inputs
 {
@@ -18,6 +19,10 @@ namespace Fsi.Ui.Inputs
         
         [SerializeField]
         private bool resetSelectionWhenNull = true;
+
+        [SerializeField]
+        private InputActionReference submitRef;
+        public InputActionReference SubmitRef => submitRef;
 
         protected override void Awake()
         {
@@ -43,7 +48,7 @@ namespace Fsi.Ui.Inputs
         private void OnControlsChanged(PlayerInput _)
         {
             string scheme = playerInput.currentControlScheme;
-            UiSettings.Logger.Warning($"OnControlsChanged: {scheme}", gameObject);
+            InputSettings.Logger.Warning($"OnControlsChanged: {scheme}", gameObject);
             InputType = scheme switch
                                       {
                                           "Keyboard & Mouse" => InputType.MouseKeyboard,

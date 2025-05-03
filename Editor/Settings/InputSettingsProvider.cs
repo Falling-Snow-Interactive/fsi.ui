@@ -7,12 +7,12 @@ using UnityEngine.UIElements;
 
 namespace Fsi.Ui.Settings
 {
-    public static class UiInputSettingsProvider
+    public static class InputSettingsProvider
     {
         [SettingsProvider]
         public static SettingsProvider CreateSettingsProvider()
         {
-            SettingsProvider provider = new("Fsi/Ui/Input", SettingsScope.Project)
+            SettingsProvider provider = new("Fsi/Input", SettingsScope.Project)
                                         {
                                             label = "Input",
                                             activateHandler = OnActivate,
@@ -23,12 +23,12 @@ namespace Fsi.Ui.Settings
 
         private static void OnActivate(string searchContext, VisualElement root)
         {
-            SerializedObject settingsProp = UiSettings.GetSerializedSettings();
+            SerializedObject settingsProp = InputSettings.GetSerializedSettings();
 
             ScrollView scrollView = new();
             root.Add(scrollView);
 
-            Label title = LabelUtility.Title("Ui Input Settings");
+            Label title = LabelUtility.Title("Input Settings");
             scrollView.Add(title);
             
             scrollView.Add(Spacer.Wide());
