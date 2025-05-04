@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -48,12 +49,13 @@ namespace Fsi.Ui.Spacers
             #endif
         }
 
-        public Spacer(SpacerOrientation orientation, SpacerColor color)
+        private Spacer(SpacerOrientation orientation, SpacerColor color)
         {
             Color c = color switch
                       {
                           SpacerColor.Light => LightColor,
                           SpacerColor.Dark => DarkColor,
+                          SpacerColor.Blank => Color.clear,
                           _ => DefaultColor,
                       };
             
@@ -81,27 +83,35 @@ namespace Fsi.Ui.Spacers
                                      }
                                  };
 
-            if (orientation == SpacerOrientation.Horizontal)
+            switch (orientation)
             {
-                root.style.height = DefaultSize;
-            }
-            else
-            {
-                root.style.width = DefaultSize;
+                case SpacerOrientation.Horizontal:
+                    root.style.height = DefaultSize;
+                    break;
+                case SpacerOrientation.Vertical:
+                    root.style.width = DefaultSize;
+                    break;
+                case SpacerOrientation.Fill:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(orientation), orientation, null);
             }
             
             Add(root);
             #endif
         }
         
-        public static Spacer Wide => new Spacer(SpacerOrientation.Horizontal, SpacerColor.Normal);
-        public static Spacer Tall => new Spacer(SpacerOrientation.Vertical, SpacerColor.Normal);
+        public static Spacer Wide => new(SpacerOrientation.Horizontal, SpacerColor.Normal);
+        public static Spacer Tall => new(SpacerOrientation.Vertical, SpacerColor.Normal);
+        public static Spacer BlankWide => new(SpacerOrientation.Horizontal, SpacerColor.Blank);
+        public static Spacer BlankTall => new(SpacerOrientation.Vertical, SpacerColor.Blank);
     }
 
     public enum SpacerOrientation
     {
         Horizontal = 0,
-        Vertical = 1
+        Vertical = 1,
+        Fill = 3
     }
 
     public enum SpacerColor
@@ -109,5 +119,6 @@ namespace Fsi.Ui.Spacers
         Normal = 0,
         Light = 1,
         Dark = 2,
+        Blank = 3,
     }
 }
