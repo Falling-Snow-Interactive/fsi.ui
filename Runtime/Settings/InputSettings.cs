@@ -1,26 +1,31 @@
+using Fsi.Ui.Inputs.Prompts.Information;
 using Fsi.Ui.Settings.SchemeInformations;
 using UnityEditor;
 using UnityEngine;
 
 namespace Fsi.Ui.Settings
 {
-    public class UiSettings : ScriptableObject
+    public class InputSettings : ScriptableObject
     {
         private const string ResourcePath = "Settings/UiSettings";
         private const string FullPath = "Assets/Resources/" + ResourcePath + ".asset";
 
-        private static UiSettings _settings;
-        public static UiSettings Settings => _settings ??= GetOrCreateSettings();
+        private static InputSettings settings;
+        public static InputSettings Settings => settings ??= GetOrCreateSettings();
 
         [SerializeField]
         private SchemeInformationGroup schemeInformation;
         public SchemeInformationGroup SchemeInformation => schemeInformation;
+
+        [SerializeField]
+        private PromptInformationGroup promptInformation;
+        public PromptInformationGroup PromptInformation => promptInformation;
         
         #region Settings
 
-        private static UiSettings GetOrCreateSettings()
+        private static InputSettings GetOrCreateSettings()
         {
-            UiSettings settings = Resources.Load<UiSettings>(ResourcePath);
+            InputSettings settings = Resources.Load<InputSettings>(ResourcePath);
 
             #if UNITY_EDITOR
             if (!settings)
@@ -35,7 +40,7 @@ namespace Fsi.Ui.Settings
                     AssetDatabase.CreateFolder("Assets/Resources", "Settings");
                 }
 
-                settings = CreateInstance<UiSettings>();
+                settings = CreateInstance<InputSettings>();
                 AssetDatabase.CreateAsset(settings, FullPath);
                 AssetDatabase.SaveAssets();
             }
@@ -48,7 +53,7 @@ namespace Fsi.Ui.Settings
         
         public static SerializedObject GetSerializedSettings()
         {
-            return new(GetOrCreateSettings());
+            return new SerializedObject(GetOrCreateSettings());
         }
         #endif
 

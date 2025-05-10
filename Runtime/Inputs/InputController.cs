@@ -6,6 +6,7 @@ using Fsi.Ui.Settings.SchemeInformations;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using InputSettings = Fsi.Ui.Settings.InputSettings;
 
 namespace Fsi.Ui.Inputs
 {
@@ -49,7 +50,7 @@ namespace Fsi.Ui.Inputs
             string scheme = playerInput.currentControlScheme;
             // UiSettings.Logger.Warning($"OnControlsChanged: {scheme}", gameObject);
 
-            foreach (SchemeInformation info in UiSettings.Settings.SchemeInformation.Information)
+            foreach (SchemeInformation info in InputSettings.Settings.SchemeInformation.Information)
             {
                 if (scheme == info.Type)
                 {
