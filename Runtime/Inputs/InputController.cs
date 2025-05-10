@@ -1,5 +1,6 @@
 using System;
 using Fsi.Gameplay;
+using Fsi.Ui.Inputs.Prompts;
 using Fsi.Ui.Settings;
 using Fsi.Ui.Settings.SchemeInformations;
 using UnityEngine;
@@ -15,10 +16,12 @@ namespace Fsi.Ui.Inputs
         [SerializeField]
         private PlayerInput playerInput;
         
-        public InputType InputType { get; private set; }
+        public PromptType InputPrompt { get; private set; }
         
         [SerializeField]
         private bool resetSelectionWhenNull = true;
+
+        private PromptType optionPromptType;
 
         protected override void Awake()
         {
@@ -50,7 +53,7 @@ namespace Fsi.Ui.Inputs
             {
                 if (scheme == info.Type)
                 {
-                    InputType = info.Input;
+                    InputPrompt = info.Prompts;
                     InputChanged?.Invoke();
                     break;
                 }
@@ -62,6 +65,17 @@ namespace Fsi.Ui.Inputs
             if (resetSelectionWhenNull && EventSystem.current)
             {
                 EventSystem.current?.SetSelectedGameObject(EventSystem.current.firstSelectedGameObject);
+            }
+        }
+        
+        public PromptType GetPromptType()
+        {
+            switch (optionPromptType)
+            {
+                case PromptType.Auto:
+                    return InputPrompt;
+                default:
+                    return optionPromptType;
             }
         }
     }

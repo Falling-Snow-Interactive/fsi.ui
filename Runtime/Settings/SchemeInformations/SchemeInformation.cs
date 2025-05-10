@@ -1,7 +1,9 @@
 using System;
 using fsi.settings.Informations;
 using Fsi.Ui.Inputs;
+using Fsi.Ui.Inputs.Prompts;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Fsi.Ui.Settings.SchemeInformations
 {
@@ -12,8 +14,10 @@ namespace Fsi.Ui.Settings.SchemeInformations
         private string scheme;
         public override String Type => scheme;
 
+        [FormerlySerializedAs("prompt")]
+        [FormerlySerializedAs("input")]
         [SerializeField]
-        private InputType input;
-        public InputType Input => input;
+        private PromptType prompts;
+        public PromptType Prompts => prompts;
     }
 }
