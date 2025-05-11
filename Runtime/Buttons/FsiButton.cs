@@ -14,7 +14,6 @@ namespace Fsi.Ui.Buttons
         public ColorProperties normal;
         public ColorProperties highlighted;
         public ColorProperties pressed;
-        public ColorProperties selected;
         public ColorProperties disabled;
         
         // Graphic references
@@ -54,14 +53,12 @@ namespace Fsi.Ui.Buttons
                 case SelectionState.Normal:
                     normal?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
                     break;
+                case SelectionState.Selected:
                 case SelectionState.Highlighted:
                     highlighted?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
                     break;
                 case SelectionState.Pressed:
                     pressed?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
-                    break;
-                case SelectionState.Selected:
-                    selected?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
                     break;
                 case SelectionState.Disabled:
                     disabled?.CrossFade(backgrounds, primaryAccents, secondaryAccents);

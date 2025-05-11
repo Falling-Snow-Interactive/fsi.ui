@@ -111,10 +111,6 @@ namespace Fsi.Ui.FsiSelectables
             PropertyField pressedField = new(pressedProp){name = "pressed_field"};
             buttonStateColors.Add(pressedField);
             
-            SerializedProperty selectedProp = serializedObject.FindProperty(nameof(fsiButton.selected));
-            PropertyField selectedField = new(selectedProp){name = "selected_field"};
-            buttonStateColors.Add(selectedField);
-            
             SerializedProperty disabledProp = serializedObject.FindProperty(nameof(fsiButton.disabled));
             PropertyField disabledField = new(disabledProp){name = "disabled_field"};
             buttonStateColors.Add(disabledField);
