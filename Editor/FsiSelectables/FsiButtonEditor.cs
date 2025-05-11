@@ -89,31 +89,39 @@ namespace Fsi.Ui.FsiSelectables
             
             Label label = LabelUtility.Category("Visuals");
             root.Add(label);
+
+            Foldout colorsFold = new Foldout() { text = "Colors", value = false };
+            root.Add(colorsFold);
             
             SerializedProperty colorsProp = serializedObject.FindProperty("colors");
-            PropertyField colorsField = new(colorsProp);
-            root.Add(colorsField);
+            PropertyField colorsField = new(colorsProp) { label = "Base", name = "base_color" };
+            colorsFold.Add(colorsField);
             
             // Colors
-            Foldout buttonStateColors = new(){ text = "Button State Colors" , value = EditorPrefs.GetBool("FsiButton.ButtonStateColors") };
-            buttonStateColors.RegisterValueChangedCallback(evt => EditorPrefs.SetBool("FsiButton.ButtonStateColors", evt.newValue));
-            root.Add(buttonStateColors);
+            // Foldout buttonStateColors = new(){ text = "Button State Colors" , value = EditorPrefs.GetBool("FsiButton.ButtonStateColors") };
+            // buttonStateColors.RegisterValueChangedCallback(evt => EditorPrefs.SetBool("FsiButton.ButtonStateColors", evt.newValue));
+            // colorsFold.Add(buttonStateColors);
             
             SerializedProperty normalProp = serializedObject.FindProperty(nameof(fsiButton.normal));
             PropertyField normalField = new(normalProp){name = "normal_field"};
-            buttonStateColors.Add(normalField);
+            colorsFold.Add(normalField);
             
             SerializedProperty highlightedProp = serializedObject.FindProperty(nameof(fsiButton.highlighted));
             PropertyField highlightedField = new(highlightedProp){name = "highlighted_field"};
-            buttonStateColors.Add(highlightedField);
+            colorsFold.Add(highlightedField);
             
             SerializedProperty pressedProp = serializedObject.FindProperty(nameof(fsiButton.pressed));
             PropertyField pressedField = new(pressedProp){name = "pressed_field"};
-            buttonStateColors.Add(pressedField);
+            colorsFold.Add(pressedField);
             
             SerializedProperty disabledProp = serializedObject.FindProperty(nameof(fsiButton.disabled));
             PropertyField disabledField = new(disabledProp){name = "disabled_field"};
-            buttonStateColors.Add(disabledField);
+            colorsFold.Add(disabledField);
+            
+            // Highlights
+            SerializedProperty highlightsProp = serializedObject.FindProperty(nameof(fsiButton.highlightObjects));
+            PropertyField highlightsField = new(highlightsProp);
+            root.Add(highlightsField);
 
             return root;
         }

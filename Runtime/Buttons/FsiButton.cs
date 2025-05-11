@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Fsi.Ui.Colors;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Fsi.Ui.Buttons
@@ -20,6 +22,9 @@ namespace Fsi.Ui.Buttons
         public List<Graphic> backgrounds = new();
         public List<Graphic> primaryAccents = new();
         public List<Graphic> secondaryAccents = new();
+
+        // Highlight Objects (can also be referenced for colours)
+        public List<GameObject> highlightObjects;
         
         protected override void OnValidate()
         {
@@ -33,6 +38,34 @@ namespace Fsi.Ui.Buttons
             base.Awake();
             onClick.AddListener(OnClick);
         }
+
+        #region Selectable Overrides
+        
+        public override void OnPointerEnter(PointerEventData evt)
+        {
+            base.OnPointerEnter(evt);
+            SetHighlight(true);
+        }
+
+        public override void OnPointerExit(PointerEventData evt)
+        {
+            base.OnPointerExit(evt);
+            SetHighlight(false);
+        }
+
+        public override void OnSelect(BaseEventData evt)
+        {
+            base.OnSelect(evt);
+            SetHighlight(true);
+        }
+
+        public override void OnDeselect(BaseEventData evt)
+        {
+            base.OnDeselect(evt);
+            SetHighlight(false);
+        }
+        
+        #endregion
 
         protected virtual void OnClick()
         {
@@ -86,6 +119,14 @@ namespace Fsi.Ui.Buttons
         protected virtual void OnDisabledState()
         {
             disabled?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
+        }
+
+        private void SetHighlight(bool set)
+        {
+            foreach (var h in highlightObjects)
+            {
+                h.SetActive(set);
+            }
         }
     }
 }
