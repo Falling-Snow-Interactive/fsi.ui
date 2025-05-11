@@ -1,3 +1,4 @@
+using Fsi.Ui.Input.Settings;
 using Fsi.Ui.Labels;
 using Fsi.Ui.Spacers;
 using UnityEditor;
@@ -13,9 +14,9 @@ namespace Fsi.Ui.Settings
         [SettingsProvider]
         public static SettingsProvider CreateSettingsProvider()
         {
-            SettingsProvider provider = new("Fsi/Ui", SettingsScope.Project)
+            SettingsProvider provider = new("Fsi/Input", SettingsScope.Project)
                                         {
-                                            label = "Ui",
+                                            label = "Input",
                                             activateHandler = OnActivate,
                                         };
             
@@ -29,46 +30,33 @@ namespace Fsi.Ui.Settings
             ScrollView scrollView = new();
             root.Add(scrollView);
 
-            Label title = LabelUtility.Title("Ui Settings");
+            Label title = LabelUtility.Title("Input Settings");
             scrollView.Add(title);
             
             #region Input Schemes
             
             scrollView.Add(Spacer.Wide);
-            scrollView.Add(CreateSchemeCategory());
-            
-            #endregion
-            
-            #region Prompts
-            
-            scrollView.Add(Spacer.Wide);
-            scrollView.Add(CreatePromptCategory());
+            scrollView.Add(CreateInputCategory());
             
             #endregion
             
             root.Bind(settingsProp);
         }
 
-        private static VisualElement CreateSchemeCategory()
+        private static VisualElement CreateInputCategory()
         {
             VisualElement root = new();
             
-            Label title = LabelUtility.Category("Input Schemes");
+            Label title = LabelUtility.Category("Information");
             root.Add(title);
+            
+            SerializedProperty inputProp = settingsProp.FindProperty("inputInformation");
+            PropertyField inputField = new(inputProp);
+            root.Add(inputField);
             
             SerializedProperty schemeProp = settingsProp.FindProperty("schemeInformation");
             PropertyField schemeField = new(schemeProp);
             root.Add(schemeField);
-
-            return root;
-        }
-
-        private static VisualElement CreatePromptCategory()
-        {
-            VisualElement root = new();
-            
-            Label title = LabelUtility.Category("Prompts");
-            root.Add(title);
             
             SerializedProperty promptProp = settingsProp.FindProperty("promptInformation");
             PropertyField promptField = new(promptProp);

@@ -1,8 +1,9 @@
 using System;
 using fsi.settings.Informations;
 using UnityEngine;
+using UnityEngine.Localization;
 
-namespace Fsi.Ui.Inputs.Prompts.Information
+namespace Fsi.Ui.Input.Prompts.Information
 {
     [Serializable]
     public class PromptInformation : Information<PromptType>
@@ -10,9 +11,9 @@ namespace Fsi.Ui.Inputs.Prompts.Information
         [SerializeField]
         private PromptType prompt;
         public override PromptType Type => prompt;
-
+        
         [SerializeField]
-        private Sprite sprite;
-        public Sprite Sprite => sprite;
+        private LocalizedString locName;
+        public string Name => locName.IsEmpty ? "no_loc" : locName.GetLocalizedString();
     }
 }

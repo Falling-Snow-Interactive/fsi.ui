@@ -1,11 +1,10 @@
 using System;
 using fsi.settings.Informations;
-using Fsi.Ui.Inputs;
-using Fsi.Ui.Inputs.Prompts;
+using Fsi.Ui.Input.Prompts;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Fsi.Ui.Settings.SchemeInformations
+namespace Fsi.Ui.Input.Settings.SchemeInformations
 {
     [Serializable]
     public class SchemeInformation : Information<string>

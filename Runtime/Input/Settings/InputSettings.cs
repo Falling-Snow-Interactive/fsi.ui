@@ -1,9 +1,10 @@
-using Fsi.Ui.Inputs.Prompts.Information;
+using Fsi.Ui.Input.Information;
+using Fsi.Ui.Input.Prompts.Information;
 using Fsi.Ui.Settings.SchemeInformations;
 using UnityEditor;
 using UnityEngine;
 
-namespace Fsi.Ui.Settings
+namespace Fsi.Ui.Input.Settings
 {
     public class InputSettings : ScriptableObject
     {
@@ -16,6 +17,10 @@ namespace Fsi.Ui.Settings
         [SerializeField]
         private SchemeInformationGroup schemeInformation;
         public SchemeInformationGroup SchemeInformation => schemeInformation;
+
+        [SerializeField]
+        private InputInformationGroup inputInformation;
+        public InputInformationGroup InputInformation => inputInformation;
 
         [SerializeField]
         private PromptInformationGroup promptInformation;

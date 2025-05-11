@@ -1,4 +1,5 @@
 using fsi.settings.Informations;
+using Fsi.Ui.Input.Settings.SchemeInformations;
 
 namespace Fsi.Ui.Settings.SchemeInformations
 {
