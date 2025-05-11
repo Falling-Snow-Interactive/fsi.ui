@@ -139,13 +139,17 @@ namespace Fsi.Ui.FsiSelectables
             PropertyField backgroundsField = new(backgroundsProp);
             root.Add(backgroundsField);
             
-            SerializedProperty primaryAccentsProp = serializedObject.FindProperty(nameof(fsiButton.primaryAccents));
+            SerializedProperty primaryAccentsProp = serializedObject.FindProperty(nameof(fsiButton.primary));
             PropertyField primaryAccentsField = new(primaryAccentsProp);
             root.Add(primaryAccentsField);
             
-            SerializedProperty secondaryAccentsProp = serializedObject.FindProperty(nameof(fsiButton.secondaryAccents));
+            SerializedProperty secondaryAccentsProp = serializedObject.FindProperty(nameof(fsiButton.secondary));
             PropertyField secondaryAccentsField = new(secondaryAccentsProp);
             root.Add(secondaryAccentsField);
+            
+            SerializedProperty tertiaryProp = serializedObject.FindProperty(nameof(fsiButton.tertiary));
+            PropertyField tertiaryField = new(tertiaryProp);
+            root.Add(tertiaryField);
 
             return root;
         }

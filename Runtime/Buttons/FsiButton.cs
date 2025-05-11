@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Fsi.Ui.Colors;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Fsi.Ui.Buttons
@@ -20,8 +21,11 @@ namespace Fsi.Ui.Buttons
         
         // Graphic references
         public List<Graphic> backgrounds = new();
-        public List<Graphic> primaryAccents = new();
-        public List<Graphic> secondaryAccents = new();
+        [FormerlySerializedAs("primaryAccents")]
+        public List<Graphic> primary = new();
+        [FormerlySerializedAs("secondaryAccents")]
+        public List<Graphic> secondary = new();
+        public List<Graphic> tertiary = new();
 
         // Highlight Objects (can also be referenced for colours)
         public List<GameObject> highlightObjects;
@@ -75,7 +79,7 @@ namespace Fsi.Ui.Buttons
 
         public void SetBaseColors()
         {
-            colors?.Set(backgrounds, primaryAccents, secondaryAccents);
+            colors?.Set(backgrounds, primary, secondary, tertiary);
         }
         
         // Debating to having selected and highlighted be the same thing - KD
@@ -103,22 +107,22 @@ namespace Fsi.Ui.Buttons
 
         protected virtual void OnNormalState()
         {
-            normal?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
+            normal?.CrossFade(backgrounds, primary, secondary, tertiary);
         }
 
         protected virtual void OnHighlightState()
         {
-            highlighted?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
+            highlighted?.CrossFade(backgrounds, primary, secondary, tertiary);
         }
 
         protected virtual void OnPressedState()
         {
-            pressed?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
+            pressed?.CrossFade(backgrounds, primary, secondary, tertiary);
         }
 
         protected virtual void OnDisabledState()
         {
-            disabled?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
+            disabled?.CrossFade(backgrounds, primary, secondary, tertiary);
         }
 
         private void SetHighlight(bool set)

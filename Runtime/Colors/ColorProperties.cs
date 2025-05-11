@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Fsi.Ui.Colors
@@ -16,50 +16,69 @@ namespace Fsi.Ui.Colors
         [SerializeField]
         private float backgroundMultiplier = 1f;
 
+        [FormerlySerializedAs("primaryAccent")]
         [SerializeField]
-        private Color primaryAccent = Color.black;
+        private Color primary = Color.black;
+        
+        [FormerlySerializedAs("primaryAccentMultiplier")]
+        [Range(0,2)]
+        [SerializeField]
+        private float primaryMultiplier = 1f;
+
+        [FormerlySerializedAs("secondaryAccent")]
+        [SerializeField]
+        private Color secondary = Color.grey;
+        
+        [FormerlySerializedAs("secondaryAccentMultiplier")]
+        [Range(0,2)]
+        [SerializeField]
+        private float secondaryMultiplier = 1f;
+        
+        [SerializeField]
+        private Color tertiary = Color.grey;
         
         [Range(0,2)]
         [SerializeField]
-        private float primaryAccentMultiplier = 1f;
+        private float tertiaryMultiplier = 1f;
 
-        [SerializeField]
-        private Color secondaryAccent = Color.grey;
-        
-        [Range(0,2)]
-        [SerializeField]
-        private float secondaryAccentMultiplier = 1f;
-
-        public void Set(List<Graphic> backgrounds,
-                        List<Graphic> primaryAccents,
-                        List<Graphic> secondaryAccents)
+        public void Set(List<Graphic> background,
+                        List<Graphic> primary,
+                        List<Graphic> secondary,
+                        List<Graphic> tertiary)
         {
-            foreach (Graphic b in backgrounds)
+            foreach (Graphic b in background)
             {
-                b.color = background;
+                b.color = this.background;
             }
 
-            foreach (Graphic a in primaryAccents)
+            foreach (Graphic a in primary)
             {
-                a.color = primaryAccent;
+                a.color = this.primary;
             }
 
-            foreach (Graphic s in secondaryAccents)
+            foreach (Graphic s in secondary)
             {
-                s.color = secondaryAccent;
+                s.color = this.secondary;
+            }
+            
+            foreach (Graphic t in tertiary)
+            {
+                t.color = this.tertiary;
             }
         }
         
-        public void CrossFade(List<Graphic> backgrounds,
-                          List<Graphic> primaryAccents,
-                          List<Graphic> secondaryAccents)
+        public void CrossFade(List<Graphic> background,
+                          List<Graphic> primary,
+                          List<Graphic> secondary,
+                          List<Graphic> tertiary)
         {
-            CrossFadeBackgrounds(backgrounds);
-            CrossFadePrimaryAccents(primaryAccents);
-            CrossFadeSecondaryAccents(secondaryAccents);
+            CrossFadeBackground(background);
+            CrossFadePrimary(primary);
+            CrossFadeSecondary(secondary);
+            CrossFadeTertiary(tertiary);
         }
 
-        public void CrossFadeBackgrounds(List<Graphic> backgrounds)
+        public void CrossFadeBackground(List<Graphic> backgrounds)
         {
             foreach (Graphic graphic in backgrounds)
             {
@@ -67,19 +86,27 @@ namespace Fsi.Ui.Colors
             }
         }
 
-        public void CrossFadePrimaryAccents(List<Graphic> graphics)
+        public void CrossFadePrimary(List<Graphic> graphics)
         {
             foreach (var graphic in graphics)
             {
-                graphic.CrossFadeColor(primaryAccent * primaryAccentMultiplier, 0.1f, true, true);
+                graphic.CrossFadeColor(primary * primaryMultiplier, 0.1f, true, true);
             }
         }
 
-        public void CrossFadeSecondaryAccents(List<Graphic> graphics)
+        public void CrossFadeSecondary(List<Graphic> graphics)
         {
             foreach (Graphic graphic in graphics)
             {
-                graphic.CrossFadeColor(secondaryAccent * secondaryAccentMultiplier, 0.1f, true, true);
+                graphic.CrossFadeColor(secondary * secondaryMultiplier, 0.1f, true, true);
+            }
+        }
+        
+        public void CrossFadeTertiary(List<Graphic> graphics)
+        {
+            foreach (Graphic graphic in graphics)
+            {
+                graphic.CrossFadeColor(tertiary * tertiaryMultiplier, 0.1f, true, true);
             }
         }
     }
