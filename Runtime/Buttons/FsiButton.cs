@@ -51,21 +51,41 @@ namespace Fsi.Ui.Buttons
             switch (state)
             {
                 case SelectionState.Normal:
-                    normal?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
+                    OnNormalState();
                     break;
                 case SelectionState.Selected:
                 case SelectionState.Highlighted:
-                    highlighted?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
+                    OnHighlightState();
                     break;
                 case SelectionState.Pressed:
-                    pressed?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
+                    OnPressedState();
                     break;
                 case SelectionState.Disabled:
-                    disabled?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
+                    OnDisabledState();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(state), state, null);
             }
+        }
+
+        protected virtual void OnNormalState()
+        {
+            normal?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
+        }
+
+        protected virtual void OnHighlightState()
+        {
+            highlighted?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
+        }
+
+        protected virtual void OnPressedState()
+        {
+            pressed?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
+        }
+
+        protected virtual void OnDisabledState()
+        {
+            disabled?.CrossFade(backgrounds, primaryAccents, secondaryAccents);
         }
     }
 }

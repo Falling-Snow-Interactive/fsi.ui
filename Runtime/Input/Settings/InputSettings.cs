@@ -6,9 +6,11 @@ using UnityEngine;
 
 namespace Fsi.Ui.Input.Settings
 {
+    [CreateAssetMenu(menuName = "Fsi/Settings/Input", fileName = "New FSI Input Settings")]
     public class InputSettings : ScriptableObject
     {
-        private const string ResourcePath = "Settings/UiSettings";
+        private const string DefaultConfigPath = "Packages/com.fallingsnowinteractive.ui/Assets/Config/FsiInputSettings.asset";
+        private const string ResourcePath = "Settings/FsiInputSettings";
         private const string FullPath = "Assets/Resources/" + ResourcePath + ".asset";
 
         private static InputSettings settings;
@@ -31,6 +33,7 @@ namespace Fsi.Ui.Input.Settings
         private static InputSettings GetOrCreateSettings()
         {
             InputSettings settings = Resources.Load<InputSettings>(ResourcePath);
+            Debug.Log("Loading input settings");
 
             #if UNITY_EDITOR
             if (!settings)
@@ -45,9 +48,15 @@ namespace Fsi.Ui.Input.Settings
                     AssetDatabase.CreateFolder("Assets/Resources", "Settings");
                 }
 
+                var d = AssetDatabase.LoadAssetAtPath<InputSettings>(DefaultConfigPath);
                 settings = CreateInstance<InputSettings>();
+                settings.schemeInformation = d.schemeInformation;
+                settings.inputInformation = d.inputInformation;
+                settings.promptInformation = d.promptInformation;
                 AssetDatabase.CreateAsset(settings, FullPath);
                 AssetDatabase.SaveAssets();
+                
+                Debug.Log($"Copied default input settings to {FullPath}");
             }
             #endif
 
