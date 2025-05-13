@@ -33,7 +33,7 @@ namespace Fsi.Ui.Buttons
         protected override void OnValidate()
         {
             transition = Transition.None;
-            SetBaseColors();
+            // SetBaseColors();
             DoStateTransition(SelectionState.Normal, true);
         }
 
@@ -45,29 +45,29 @@ namespace Fsi.Ui.Buttons
 
         #region Selectable Overrides
         
-        public override void OnPointerEnter(PointerEventData evt)
-        {
-            base.OnPointerEnter(evt);
-            SetHighlight(true);
-        }
-
-        public override void OnPointerExit(PointerEventData evt)
-        {
-            base.OnPointerExit(evt);
-            SetHighlight(false);
-        }
-
-        public override void OnSelect(BaseEventData evt)
-        {
-            base.OnSelect(evt);
-            SetHighlight(true);
-        }
-
-        public override void OnDeselect(BaseEventData evt)
-        {
-            base.OnDeselect(evt);
-            SetHighlight(false);
-        }
+        // public override void OnPointerEnter(PointerEventData evt)
+        // {
+        //     base.OnPointerEnter(evt);
+        //     SetHighlight(true);
+        // }
+        //
+        // public override void OnPointerExit(PointerEventData evt)
+        // {
+        //     base.OnPointerExit(evt);
+        //     SetHighlight(false);
+        // }
+        //
+        // public override void OnSelect(BaseEventData evt)
+        // {
+        //     base.OnSelect(evt);
+        //     SetHighlight(true);
+        // }
+        //
+        // public override void OnDeselect(BaseEventData evt)
+        // {
+        //     base.OnDeselect(evt);
+        //     SetHighlight(false);
+        // }
         
         #endregion
 
@@ -77,60 +77,60 @@ namespace Fsi.Ui.Buttons
             // ...
         }
 
-        public void SetBaseColors()
-        {
-            colors?.Set(backgrounds, primary, secondary, tertiary);
-        }
+        // public void SetBaseColors()
+        // {
+        //     colors?.Set(backgrounds, primary, secondary, tertiary);
+        // }
         
         // Debating to having selected and highlighted be the same thing - KD
-        protected override void DoStateTransition(SelectionState state, bool instant)
-        {
-            switch (state)
-            {
-                case SelectionState.Normal:
-                    OnNormalState();
-                    break;
-                case SelectionState.Selected:
-                case SelectionState.Highlighted:
-                    OnHighlightState();
-                    break;
-                case SelectionState.Pressed:
-                    OnPressedState();
-                    break;
-                case SelectionState.Disabled:
-                    OnDisabledState();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(state), state, null);
-            }
-        }
+        // protected override void DoStateTransition(SelectionState state, bool instant)
+        // {
+        //     switch (state)
+        //     {
+        //         case SelectionState.Normal:
+        //             OnNormalState();
+        //             break;
+        //         case SelectionState.Selected:
+        //         case SelectionState.Highlighted:
+        //             OnHighlightState();
+        //             break;
+        //         case SelectionState.Pressed:
+        //             OnPressedState();
+        //             break;
+        //         case SelectionState.Disabled:
+        //             OnDisabledState();
+        //             break;
+        //         default:
+        //             throw new ArgumentOutOfRangeException(nameof(state), state, null);
+        //     }
+        // }
 
-        protected virtual void OnNormalState()
-        {
-            normal?.CrossFade(backgrounds, primary, secondary, tertiary);
-        }
-
-        protected virtual void OnHighlightState()
-        {
-            highlighted?.CrossFade(backgrounds, primary, secondary, tertiary);
-        }
-
-        protected virtual void OnPressedState()
-        {
-            pressed?.CrossFade(backgrounds, primary, secondary, tertiary);
-        }
-
-        protected virtual void OnDisabledState()
-        {
-            disabled?.CrossFade(backgrounds, primary, secondary, tertiary);
-        }
-
-        private void SetHighlight(bool set)
-        {
-            foreach (var h in highlightObjects)
-            {
-                h.SetActive(set);
-            }
-        }
+        // protected virtual void OnNormalState()
+        // {
+        //     normal?.CrossFade(backgrounds, primary, secondary, tertiary);
+        // }
+        //
+        // protected virtual void OnHighlightState()
+        // {
+        //     highlighted?.CrossFade(backgrounds, primary, secondary, tertiary);
+        // }
+        //
+        // protected virtual void OnPressedState()
+        // {
+        //     pressed?.CrossFade(backgrounds, primary, secondary, tertiary);
+        // }
+        //
+        // protected virtual void OnDisabledState()
+        // {
+        //     disabled?.CrossFade(backgrounds, primary, secondary, tertiary);
+        // }
+        //
+        // private void SetHighlight(bool set)
+        // {
+        //     foreach (var h in highlightObjects)
+        //     {
+        //         h.SetActive(set);
+        //     }
+        // }
     }
 }

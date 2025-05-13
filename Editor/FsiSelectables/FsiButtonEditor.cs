@@ -18,7 +18,7 @@ namespace Fsi.Ui.FsiSelectables
             fsiButton = target as FsiButton;
             
             // Update properties when opening inspector.
-            fsiButton?.SetBaseColors();
+            // fsiButton?.SetBaseColors();
             
             VisualElement root = new();
             
