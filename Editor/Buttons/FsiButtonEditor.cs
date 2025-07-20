@@ -1,12 +1,9 @@
-using Fsi.Ui.Buttons;
-using Fsi.Ui.Labels;
-using Fsi.Ui.Spacers;
 using UnityEditor;
 using UnityEditor.UI;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-namespace Fsi.Ui.FsiSelectables
+namespace Fsi.Ui.Buttons
 {
     [CustomEditor(typeof(FsiButton))]
     public class FsiButtonEditor : ButtonEditor
@@ -17,9 +14,6 @@ namespace Fsi.Ui.FsiSelectables
         {
             fsiButton = target as FsiButton;
             
-            // Update properties when opening inspector.
-            // fsiButton?.SetBaseColors();
-            
             VisualElement root = new();
             
             root.Add(base.CreateInspectorGUI());
@@ -29,20 +23,23 @@ namespace Fsi.Ui.FsiSelectables
             SerializedProperty scriptProp = serializedObject.FindProperty("m_Script");
             PropertyField scriptField = new(scriptProp){ enabledSelf = false };
             root.Add(scriptField);
-            root.Add(Spacer.BlankWide);
             
-            #endregion
-            
-            #region Properties
-            root.Add(CreatePropertiesCategory());
             #endregion
             
             #region Button
             root.Add(CreateButtonCategory());
             #endregion
             
+            #region Objects
+            root.Add(CreateObjectsCategory());
+            #endregion
+            
             #region Visuals
-            root.Add(CreateVisualsCategory());
+            root.Add(CreateColorsCategory());
+            #endregion
+            
+            #region Highlight
+            root.Add(CreateHighlightCategory());
             #endregion
 
             #region References
@@ -52,20 +49,10 @@ namespace Fsi.Ui.FsiSelectables
             return root;
         }
 
-        protected virtual VisualElement CreatePropertiesCategory()
-        {
-            return new();
-        }
-
-        protected virtual VisualElement CreateButtonCategory()
+        private VisualElement CreateButtonCategory()
         {
             VisualElement root = new();
-
-            root.Add(Spacer.Wide);
             
-            Label label = LabelUtility.Category("Button");
-            root.Add(label); 
-
             SerializedProperty interactableProp = serializedObject.FindProperty("m_Interactable");
             PropertyField interactableField = new(interactableProp);
             root.Add(interactableField);
@@ -81,44 +68,55 @@ namespace Fsi.Ui.FsiSelectables
             return root;
         }
 
-        protected virtual VisualElement CreateVisualsCategory()
+        private VisualElement CreateObjectsCategory()
         {
-            VisualElement root = new();
-            
-            root.Add(Spacer.Wide);
-            
-            Label label = LabelUtility.Category("Visuals");
-            root.Add(label);
+            Foldout root = new Foldout{ text = "Objects", value = EditorPrefs.GetBool("FsiButton.Objects")};
+            root.RegisterValueChangedCallback(evt => EditorPrefs.SetBool("FsiButton.Objects", evt.newValue));
 
-            Foldout colorsFold = new Foldout() { text = "Colors", value = false };
-            root.Add(colorsFold);
+            HelpBox helpBox = new("Normal objects will be shown when the button is interactable and " +
+                                  "disabled objects will be shown when it is not.", HelpBoxMessageType.Info);
+            root.Add(helpBox);
             
-            SerializedProperty colorsProp = serializedObject.FindProperty("colors");
-            PropertyField colorsField = new(colorsProp) { label = "Base", name = "base_color" };
-            colorsFold.Add(colorsField);
+            SerializedProperty normalObjectsProp = serializedObject.FindProperty(nameof(fsiButton.normalObjects));
+            PropertyField normalObjectsField = new(normalObjectsProp);
+            root.Add(normalObjectsField);
+
+            SerializedProperty disabledObjectsProp = serializedObject.FindProperty(nameof(fsiButton.disabledObjects));
+            PropertyField disabledObjectsField = new(disabledObjectsProp);
+            root.Add(disabledObjectsField);
             
-            // Colors
-            // Foldout buttonStateColors = new(){ text = "Button State Colors" , value = EditorPrefs.GetBool("FsiButton.ButtonStateColors") };
-            // buttonStateColors.RegisterValueChangedCallback(evt => EditorPrefs.SetBool("FsiButton.ButtonStateColors", evt.newValue));
-            // colorsFold.Add(buttonStateColors);
+            return root;
+        }
+
+        private VisualElement CreateColorsCategory()
+        {
+            Foldout root = new Foldout{ text = "Colors", value = EditorPrefs.GetBool("FsiButton.Colors")};
+            root.RegisterValueChangedCallback(evt => EditorPrefs.SetBool("FsiButton.Colors", evt.newValue));
             
             SerializedProperty normalProp = serializedObject.FindProperty(nameof(fsiButton.normal));
             PropertyField normalField = new(normalProp){name = "normal_field"};
-            colorsFold.Add(normalField);
+            root.Add(normalField);
             
             SerializedProperty highlightedProp = serializedObject.FindProperty(nameof(fsiButton.highlighted));
             PropertyField highlightedField = new(highlightedProp){name = "highlighted_field"};
-            colorsFold.Add(highlightedField);
+            root.Add(highlightedField);
             
             SerializedProperty pressedProp = serializedObject.FindProperty(nameof(fsiButton.pressed));
             PropertyField pressedField = new(pressedProp){name = "pressed_field"};
-            colorsFold.Add(pressedField);
+            root.Add(pressedField);
             
             SerializedProperty disabledProp = serializedObject.FindProperty(nameof(fsiButton.disabled));
             PropertyField disabledField = new(disabledProp){name = "disabled_field"};
-            colorsFold.Add(disabledField);
+            root.Add(disabledField);
             
-            // Highlights
+            return root;
+        }
+
+        private VisualElement CreateHighlightCategory()
+        {
+            Foldout root = new Foldout{ text = "Highlight", value = EditorPrefs.GetBool("FsiButton.Highlight")};
+            root.RegisterValueChangedCallback(evt => EditorPrefs.SetBool("FsiButton.Highlight", evt.newValue));
+            
             SerializedProperty highlightsProp = serializedObject.FindProperty(nameof(fsiButton.highlightObjects));
             PropertyField highlightsField = new(highlightsProp);
             root.Add(highlightsField);
@@ -126,14 +124,10 @@ namespace Fsi.Ui.FsiSelectables
             return root;
         }
 
-        protected virtual VisualElement CreateReferencesCategory()
+        private VisualElement CreateReferencesCategory()
         {
-            VisualElement root = new();
-            
-            root.Add(Spacer.Wide);
-            
-            Label label = LabelUtility.Category("References");
-            root.Add(label);
+            Foldout root = new Foldout{ text = "References", value = EditorPrefs.GetBool("FsiButton.References")};
+            root.RegisterValueChangedCallback(evt => EditorPrefs.SetBool("FsiButton.References", evt.newValue));
             
             SerializedProperty backgroundsProp = serializedObject.FindProperty(nameof(fsiButton.backgrounds));
             PropertyField backgroundsField = new(backgroundsProp);

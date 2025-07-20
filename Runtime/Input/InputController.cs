@@ -56,14 +56,14 @@ namespace Fsi.Ui.Input
 
         private void OnPlayerInputControlsChanged(PlayerInput _)
         {
-            string scheme = playerInput.currentControlScheme;
-            if (Settings.InputSettings.Settings.SchemeInformation.TryGetInformation(scheme, out SchemeInformation info))
-            {
-                activeInputPrompt = info.Prompts;
-                Debug.Log($"Input: Active Input Changed ({activeInputPrompt})");
-                
-                OnPromptsChanged?.Invoke();
-            }
+            // string scheme = playerInput.currentControlScheme;
+            // if (Settings.InputSettings.Settings.SchemeInformation.TryGetInformation(scheme, out SchemeInformation info))
+            // {
+            //     activeInputPrompt = info.Prompts;
+            //     Debug.Log($"Input: Active Input Changed ({activeInputPrompt})");
+            //     
+            //     OnPromptsChanged?.Invoke();
+            // }
         }
     }
 }

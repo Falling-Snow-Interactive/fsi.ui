@@ -49,7 +49,9 @@ namespace Fsi.Ui.Spacers
             #endif
         }
 
-        private Spacer(SpacerOrientation orientation, SpacerColor color)
+        public Spacer(float size, 
+                      SpacerOrientation orientation = SpacerOrientation.Horizontal, 
+                      SpacerColor color = SpacerColor.Normal)
         {
             Color c = color switch
                       {
@@ -86,10 +88,10 @@ namespace Fsi.Ui.Spacers
             switch (orientation)
             {
                 case SpacerOrientation.Horizontal:
-                    root.style.height = DefaultSize;
+                    root.style.height = size;
                     break;
                 case SpacerOrientation.Vertical:
-                    root.style.width = DefaultSize;
+                    root.style.width = size;
                     break;
                 case SpacerOrientation.Fill:
                     break;
@@ -101,10 +103,10 @@ namespace Fsi.Ui.Spacers
             #endif
         }
         
-        public static Spacer Wide => new(SpacerOrientation.Horizontal, SpacerColor.Normal);
-        public static Spacer Tall => new(SpacerOrientation.Vertical, SpacerColor.Normal);
-        public static Spacer BlankWide => new(SpacerOrientation.Horizontal, SpacerColor.Blank);
-        public static Spacer BlankTall => new(SpacerOrientation.Vertical, SpacerColor.Blank);
+        public static Spacer Wide => new(DefaultSize, SpacerOrientation.Horizontal, SpacerColor.Normal);
+        public static Spacer Tall => new(DefaultSize, SpacerOrientation.Vertical, SpacerColor.Normal);
+        public static Spacer BlankWide => new(DefaultSize, SpacerOrientation.Horizontal, SpacerColor.Blank);
+        public static Spacer BlankTall => new(DefaultSize, SpacerOrientation.Vertical, SpacerColor.Blank);
     }
 
     public enum SpacerOrientation

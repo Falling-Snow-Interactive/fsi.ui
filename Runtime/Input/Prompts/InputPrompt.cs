@@ -6,32 +6,13 @@ namespace Fsi.Ui.Input.Prompts
 {
     public class InputPrompt : MonoBehaviour
     {
-        private PromptType PromptType
-        {
-            get
-            {
-                if (InputController.Instance)
-                {
-                    return InputController.Instance.Prompt;
-                }
-
-                return debugPrompt;
-            }
-        }
+        private PromptType PromptType => InputController.Instance.Prompt;
 
         [SerializeField]
         private Image icon;
 
         [SerializeField]
         private InputActionReference input;
-        
-        [SerializeField]
-        private PromptType debugPrompt;
-
-        private void OnValidate()
-        {
-            RefreshPrompt();
-        }
 
         private void OnEnable()
         {
