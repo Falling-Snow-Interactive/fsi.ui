@@ -8,12 +8,12 @@ namespace Fsi.Ui
 	{
 		public static List<RaycastResult> GetUiElementsUnderPointer()
 		{
-			PointerEventData pointerData = new PointerEventData(EventSystem.current)
-			                               {
-				                               position = Pointer.current.position.value,
-			                               };
+			var pointerData = new PointerEventData(EventSystem.current)
+			                  {
+				                  position = Pointer.current.position.value
+			                  };
 
-			List<RaycastResult> raycastResults = new List<RaycastResult>();
+			var raycastResults = new List<RaycastResult>();
 			EventSystem.current.RaycastAll(pointerData, raycastResults);
 			return raycastResults;
 		}

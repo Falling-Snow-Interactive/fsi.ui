@@ -1,69 +1,68 @@
 using System;
 using Fsi.Gameplay;
 using Fsi.Ui.Input.Prompts;
-using Fsi.Ui.Input.Settings.SchemeInformations;
-using Fsi.Ui.Settings.SchemeInformations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Fsi.Ui.Input
 {
-    public class InputController : MbSingleton<InputController>
-    {
-        public static event Action OnPromptsChanged;
+	public class InputController : MbSingleton<InputController>
+	{
+		[SerializeField]
+		private PlayerInput playerInput;
 
-        private PromptType settingsPrompt;
-        public PromptType SettingsPrompt
-        {
-            get => settingsPrompt;
-            set
-            {
-                settingsPrompt = value;
-                OnPromptsChanged?.Invoke();
-            }
-        }
+		private PromptType activeInputPrompt;
 
-        private PromptType activeInputPrompt;
+		private PromptType settingsPrompt;
 
-        public PromptType Prompt
-        {
-            get
-            {
-                var prompt= SettingsPrompt == PromptType.Auto ? activeInputPrompt : SettingsPrompt;
-                Debug.Log($"Current Prompt: {prompt}");
-                return SettingsPrompt == PromptType.Auto ? activeInputPrompt : SettingsPrompt;
-            }
-        }
+		public PromptType SettingsPrompt
+		{
+			get => settingsPrompt;
+			set
+			{
+				settingsPrompt = value;
+				OnPromptsChanged?.Invoke();
+			}
+		}
 
-        [SerializeField]
-        private PlayerInput playerInput;
-        
-        protected override void Awake()
-        {
-            base.Awake();
-            OnPlayerInputControlsChanged(null);
-        }
-        
-        private void OnEnable()
-        {
-            playerInput.onControlsChanged += OnPlayerInputControlsChanged;
-        }
+		public PromptType Prompt
+		{
+			get
+			{
+				PromptType prompt = SettingsPrompt == PromptType.Auto ? activeInputPrompt : SettingsPrompt;
+				Debug.Log($"Current Prompt: {prompt}");
+				return SettingsPrompt == PromptType.Auto ? activeInputPrompt : SettingsPrompt;
+			}
+		}
 
-        private void OnDisable()
-        {
-            playerInput.onControlsChanged -= OnPlayerInputControlsChanged;
-        }
+		protected override void Awake()
+		{
+			base.Awake();
+			OnPlayerInputControlsChanged(null);
+		}
 
-        private void OnPlayerInputControlsChanged(PlayerInput _)
-        {
-            // string scheme = playerInput.currentControlScheme;
-            // if (Settings.InputSettings.Settings.SchemeInformation.TryGetInformation(scheme, out SchemeInformation info))
-            // {
-            //     activeInputPrompt = info.Prompts;
-            //     Debug.Log($"Input: Active Input Changed ({activeInputPrompt})");
-            //     
-            //     OnPromptsChanged?.Invoke();
-            // }
-        }
-    }
+		private void OnEnable()
+		{
+			playerInput.onControlsChanged += OnPlayerInputControlsChanged;
+		}
+
+		private void OnDisable()
+		{
+			playerInput.onControlsChanged -= OnPlayerInputControlsChanged;
+		}
+
+		public static event Action OnPromptsChanged;
+
+		private void OnPlayerInputControlsChanged(PlayerInput _)
+		{
+			// string scheme = playerInput.currentControlScheme;
+			// if (Settings.InputSettings.Settings.SchemeInformation.TryGetInformation(scheme, out SchemeInformation info))
+			// {
+			//     activeInputPrompt = info.Prompts;
+			//     Debug.Log($"Input: Active Input Changed ({activeInputPrompt})");
+			//     
+			//     OnPromptsChanged?.Invoke();
+			// }
+		}
+	}
 }

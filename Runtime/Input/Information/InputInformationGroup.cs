@@ -4,9 +4,8 @@ using UnityEngine.InputSystem;
 
 namespace Fsi.Ui.Input.Information
 {
-    [Serializable]
-    public class InputInformationGroup : InformationGroup<InputInformation, InputActionReference>
-    {
-        
-    }
+	[Serializable]
+	public class InputInformationGroup : InformationGroup<InputInformation, InputActionReference>
+	{
+	}
 }

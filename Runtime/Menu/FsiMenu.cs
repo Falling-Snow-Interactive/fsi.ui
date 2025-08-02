@@ -4,99 +4,85 @@ using UnityEngine;
 
 namespace Fsi.Ui.Menu
 {
-    public class FsiMenu<T> : MonoBehaviour
-        where T : Enum
-    {
-        private FsiPage<T> currentPage;
-        public FsiPage<T> CurrentPage => currentPage;
+	public class FsiMenu<T> : MonoBehaviour
+		where T : Enum
+	{
+		[Header("Fsi Menu")]
+		[SerializeField]
+		private bool openOnStart = true;
 
-        [Header("Fsi Menu")]
+		[Header("Pages")]
+		[SerializeField]
+		private List<FsiPage<T>> pages = new();
 
-        [SerializeField]
-        private bool openOnStart = true;
+		[Header("References")]
+		[SerializeField]
+		private GameObject root;
 
-        [Header("Pages")]
+		private Dictionary<T, FsiPage<T>> cache;
+		private FsiPage<T> currentPage;
+		public FsiPage<T> CurrentPage => currentPage;
 
-        [SerializeField]
-        private List<FsiPage<T>> pages = new();
+		private Dictionary<T, FsiPage<T>> Pages
+		{
+			get
+			{
+				cache ??= BuildDictionary();
+				return cache;
+			}
+		}
 
-        private Dictionary<T, FsiPage<T>> cache = null;
-        private Dictionary<T, FsiPage<T>> Pages
-        {
-            get
-            {
-                cache ??= BuildDictionary();
-                return cache;
-            }
-        }
+		private void Awake()
+		{
+			foreach (FsiPage<T> page in pages)
+			{
+				page.gameObject.SetActive(true);
+				page.Close();
+			}
+		}
 
-        [Header("References")]
+		protected virtual void Start()
+		{
+			foreach (FsiPage<T> page in pages) page?.Initialize(this);
 
-        [SerializeField]
-        private GameObject root;
+			if (openOnStart) Open();
+		}
 
-        private void Awake()
-        {
-            foreach (FsiPage<T> page in pages)
-            {
-                page.gameObject.SetActive(true);
-                page.Close();
-            }
-        }
+		public virtual void Open()
+		{
+			root?.SetActive(true);
+			GoToPage(default);
+		}
 
-        protected virtual void Start()
-        {
-            foreach (FsiPage<T> page in pages)
-            {
-                page?.Initialize(this);
-            }
+		public virtual void Close()
+		{
+			root?.SetActive(false);
+		}
 
-            if (openOnStart)
-            {
-                Open();
-            }
-        }
+		public void GoToPage(T to)
+		{
+			CurrentPage?.Close();
+			if (!Pages.TryGetValue(to, out currentPage))
+				Debug.Log($"Menu ({name}) could not find page of type {to}.", gameObject);
+			CurrentPage?.Open();
+		}
 
-        public virtual void Open()
-        {
-            root?.SetActive(true);
-            GoToPage(default(T));
-        }
+		private Dictionary<T, FsiPage<T>> BuildDictionary()
+		{
+			string s = "";
 
-        public virtual void Close()
-        {
-            root?.SetActive(false);
-        }
+			Dictionary<T, FsiPage<T>> dict = new();
+			for (int i = 0; i < pages.Count; i++)
+			{
+				FsiPage<T> page = pages[i];
+				dict.Add(page.Page, page);
+				s += $"Adding Page {page.Page}";
+				if (i < pages.Count - 1) s += "\n";
+			}
 
-        public void GoToPage(T to)
-        {
-            CurrentPage?.Close();
-            if (!Pages.TryGetValue(to, out currentPage))
-            {
-                Debug.Log($"Menu ({name}) could not find page of type {to}.", gameObject);
-            }
-            CurrentPage?.Open();
-        }
-
-        private Dictionary<T, FsiPage<T>> BuildDictionary()
-        {
-            string s = "";
-            
-            Dictionary<T, FsiPage<T>> dict = new();
-            for (int i = 0; i < pages.Count; i++)
-            {
-                FsiPage<T> page = pages[i];
-                dict.Add(page.Page, page);
-                s += $"Adding Page {page.Page}";
-                if (i < pages.Count - 1)
-                {
-                    s += "\n";
-                }
-            }
-            
-            Debug.Log($"Menu ({name}) indexed {pages.Count} pages.\n" +
-                      $"{s}", gameObject);
-            return dict;
-        }
-    }
+			Debug.Log($"Menu ({name}) indexed {pages.Count} pages.\n" +
+			          $"{s}", gameObject);
+			return dict;
+		}
+	}
 }

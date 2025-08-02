@@ -7,56 +7,54 @@ using UnityEngine.Localization;
 
 namespace Fsi.Ui.Input.Information
 {
-    [Serializable]
-    public class InputInformation : Information<InputActionReference>
-    {
-        [SerializeField]
-        private InputActionReference input;
-        public override InputActionReference Type => input;
-        
-        [Header("Localization")]
+	[Serializable]
+	public class InputInformation : Information<InputActionReference>
+	{
+		[SerializeField]
+		private InputActionReference input;
 
-        [SerializeField]
-        private LocalizedString locName;
-        public string Name => locName.GetLocalizedString();
-        
-        [SerializeField]
-        private LocalizedString locDescription;
-        public string Description => locDescription.GetLocalizedString();
+		[Header("Localization")]
+		[SerializeField]
+		private LocalizedString locName;
 
-        [Header("Sprites")]
+		[SerializeField]
+		private LocalizedString locDescription;
 
-        [SerializeField]
-        private Sprite mouseKeyboard;
-        
-        [SerializeField]
-        private Sprite steamDeck;
+		[Header("Sprites")]
+		[SerializeField]
+		private Sprite mouseKeyboard;
 
-        [SerializeField]
-        private Sprite xbox;
+		[SerializeField]
+		private Sprite steamDeck;
 
-        [SerializeField]
-        private Sprite playstation;
+		[SerializeField]
+		private Sprite xbox;
 
-        [SerializeField]
-        private Sprite nintendo;
+		[SerializeField]
+		private Sprite playstation;
 
-        [SerializeField]
-        private Sprite other;
+		[SerializeField]
+		private Sprite nintendo;
 
-        public bool TryGetSprite(PromptType prompt, out Sprite sprite)
-        {
-            sprite = prompt switch
-                     {
-                         PromptType.MouseKeyboard => mouseKeyboard,
-                         PromptType.Xbox => xbox,
-                         PromptType.PlayStation => playstation,
-                         PromptType.Nintendo => nintendo,
-                         PromptType.SteamDeck => steamDeck,
-                         _ => other
-                     };
+		[SerializeField]
+		private Sprite other;
+		public override InputActionReference Type => input;
+		public string Name => locName.GetLocalizedString();
+		public string Description => locDescription.GetLocalizedString();
 
-            return sprite != null;
-        }
-    }
+		public bool TryGetSprite(PromptType prompt, out Sprite sprite)
+		{
+			sprite = prompt switch
+			         {
+				         PromptType.MouseKeyboard => mouseKeyboard,
+				         PromptType.Xbox => xbox,
+				         PromptType.PlayStation => playstation,
+				         PromptType.Nintendo => nintendo,
+				         PromptType.SteamDeck => steamDeck,
+				         _ => other
+			         };
+
+			return sprite != null;
+		}
+	}
 }

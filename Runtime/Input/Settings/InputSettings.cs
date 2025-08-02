@@ -6,71 +6,67 @@ using UnityEngine;
 
 namespace Fsi.Ui.Input.Settings
 {
-    [CreateAssetMenu(menuName = "Fsi/Settings/Input", fileName = "New FSI Input Settings")]
-    public class InputSettings : ScriptableObject
-    {
-        private const string DefaultConfigPath = "Packages/com.fallingsnowinteractive.ui/Assets/Config/FsiInputSettings.asset";
-        private const string ResourcePath = "Settings/FsiInputSettings";
-        private const string FullPath = "Assets/Resources/" + ResourcePath + ".asset";
+	[CreateAssetMenu(menuName = "Fsi/Settings/Input", fileName = "New FSI Input Settings")]
+	public class InputSettings : ScriptableObject
+	{
+		private const string DefaultConfigPath
+			= "Packages/com.fallingsnowinteractive.ui/Assets/Config/FsiInputSettings.asset";
+		private const string ResourcePath = "Settings/FsiInputSettings";
+		private const string FullPath = "Assets/Resources/" + ResourcePath + ".asset";
 
-        private static InputSettings settings;
-        public static InputSettings Settings => settings ??= GetOrCreateSettings();
+		private static InputSettings settings;
 
-        [SerializeField]
-        private SchemeInformationGroup schemeInformation;
-        public SchemeInformationGroup SchemeInformation => schemeInformation;
+		[SerializeField]
+		private SchemeInformationGroup schemeInformation;
 
-        [SerializeField]
-        private InputInformationGroup inputInformation;
-        public InputInformationGroup InputInformation => inputInformation;
+		[SerializeField]
+		private InputInformationGroup inputInformation;
 
-        [SerializeField]
-        private PromptInformationGroup promptInformation;
-        public PromptInformationGroup PromptInformation => promptInformation;
-        
-        #region Settings
+		[SerializeField]
+		private PromptInformationGroup promptInformation;
+		public static InputSettings Settings => settings ??= GetOrCreateSettings();
+		public SchemeInformationGroup SchemeInformation => schemeInformation;
+		public InputInformationGroup InputInformation => inputInformation;
+		public PromptInformationGroup PromptInformation => promptInformation;
 
-        private static InputSettings GetOrCreateSettings()
-        {
-            InputSettings settings = Resources.Load<InputSettings>(ResourcePath);
-            Debug.Log("Loading input settings");
+		#region Settings
 
-            #if UNITY_EDITOR
-            if (!settings)
-            {
-                if (!AssetDatabase.IsValidFolder("Assets/Resources"))
-                {
-                    AssetDatabase.CreateFolder("Assets", "Resources");
-                }
+		private static InputSettings GetOrCreateSettings()
+		{
+			var settings = Resources.Load<InputSettings>(ResourcePath);
+			Debug.Log("Loading input settings");
 
-                if (!AssetDatabase.IsValidFolder("Assets/Resources/Settings"))
-                {
-                    AssetDatabase.CreateFolder("Assets/Resources", "Settings");
-                }
+			#if UNITY_EDITOR
+			if (!settings)
+			{
+				if (!AssetDatabase.IsValidFolder("Assets/Resources")) AssetDatabase.CreateFolder("Assets", "Resources");
 
-                var d = AssetDatabase.LoadAssetAtPath<InputSettings>(DefaultConfigPath);
-                settings = CreateInstance<InputSettings>();
-                settings.schemeInformation = d.schemeInformation;
-                settings.inputInformation = d.inputInformation;
-                settings.promptInformation = d.promptInformation;
-                AssetDatabase.CreateAsset(settings, FullPath);
-                AssetDatabase.SaveAssets();
-                
-                Debug.Log($"Copied default input settings to {FullPath}");
-            }
-            #endif
+				if (!AssetDatabase.IsValidFolder("Assets/Resources/Settings"))
+					AssetDatabase.CreateFolder("Assets/Resources", "Settings");
 
-            return settings;
-        }
+				var d = AssetDatabase.LoadAssetAtPath<InputSettings>(DefaultConfigPath);
+				settings = CreateInstance<InputSettings>();
+				settings.schemeInformation = d.schemeInformation;
+				settings.inputInformation = d.inputInformation;
+				settings.promptInformation = d.promptInformation;
+				AssetDatabase.CreateAsset(settings, FullPath);
+				AssetDatabase.SaveAssets();
 
-        #if UNITY_EDITOR
-        
-        public static SerializedObject GetSerializedSettings()
-        {
-            return new SerializedObject(GetOrCreateSettings());
-        }
-        #endif
+				Debug.Log($"Copied default input settings to {FullPath}");
+			}
+			#endif
 
-        #endregion
-    }
+			return settings;
+		}
+
+		#if UNITY_EDITOR
+
+		public static SerializedObject GetSerializedSettings()
+		{
+			return new SerializedObject(GetOrCreateSettings());
+		}
+		#endif
+
+		#endregion
+	}
 }
