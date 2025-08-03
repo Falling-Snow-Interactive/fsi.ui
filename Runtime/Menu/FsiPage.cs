@@ -23,19 +23,19 @@ namespace Fsi.Ui.Menu
 			Menu = menu;
 		}
 
-        /// <summary>
-        ///     Open the screen.
-        /// </summary>
-        public virtual void Open()
+		/// <summary>
+		///     Open the screen.
+		/// </summary>
+		public virtual void Open()
 		{
 			root?.SetActive(true);
 			if (TryGetOpenSelect(out GameObject sel)) EventSystem.current.SetSelectedGameObject(sel);
 		}
 
-        /// <summary>
-        ///     Close the screen.
-        /// </summary>
-        public virtual void Close()
+		/// <summary>
+		///     Close the screen.
+		/// </summary>
+		public virtual void Close()
 		{
 			root?.SetActive(false);
 		}
