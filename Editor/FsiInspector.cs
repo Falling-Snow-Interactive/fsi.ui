@@ -80,6 +80,11 @@ namespace Fsi.Ui
 
 			VisualElement newCategory = new();
 
+			if (categories.Count > 0)
+			{
+				newCategory.Add(new Spacer());
+			}
+
 			Label label = LabelUtility.Category(category);
 			newCategory.Add(label);
 
