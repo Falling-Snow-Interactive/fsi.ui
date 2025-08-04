@@ -35,7 +35,9 @@ namespace Fsi.Ui
 			root.Add(DrawCategories());
 			
 			Foldout defaultInspector = new(){ text = "Default Inspector", value = false};
-			InspectorElement.FillDefaultInspector(defaultInspector, serializedObject, this);
+			Box defaultBox = new();
+			defaultInspector.Add(defaultBox);
+			InspectorElement.FillDefaultInspector(defaultBox, serializedObject, this);
 			root.Add(defaultInspector);
 
 			return root;
