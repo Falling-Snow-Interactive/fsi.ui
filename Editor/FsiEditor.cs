@@ -31,7 +31,6 @@ namespace Fsi.Ui
 			scriptField.bindingPath = "m_Script";
     
 			root.Add(scriptField);
-			root.Add(new Spacer(0));
 			root.Add(DrawCategories());
 			
 			Foldout defaultInspector = new(){ text = "Default Inspector", value = false};
