@@ -31,6 +31,7 @@ namespace Fsi.Ui
     
 			root.Add(scriptField);
 			root.Add(CreateInspector());
+			root.Add(new Spacer());
 			
 			Foldout defaultInspector = new(){ text = "Default Inspector", value = false};
 			InspectorElement.FillDefaultInspector(defaultInspector, serializedObject, this);
