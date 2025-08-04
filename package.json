@@ -1,6 +1,6 @@
 {
   "name": "com.fallingsnowinteractive.ui",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "displayName": "FSI Ui",
   "description": "Package for a simple ui system.",
   "unity": "2019.1",
