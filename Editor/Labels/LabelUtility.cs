@@ -7,7 +7,7 @@ namespace Fsi.Ui.Labels
 	{
 		private const float TitleSize = 24f;
 		private const float SectionSize = 20f;
-		private const float CategorySize = 14f;
+		private const float CategorySize = 12f;
 
 		// public Header(float size, string text) : base(text)
 		// {
