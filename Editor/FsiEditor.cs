@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Fsi.Ui
 {
-	public abstract class FsiInspector : Editor
+	public abstract class FsiEditor : Editor
 	{
 		private Dictionary<string, VisualElement> categories = new();
 
@@ -30,7 +30,7 @@ namespace Fsi.Ui
 			scriptField.bindingPath = "m_Script";
     
 			root.Add(scriptField);
-			root.Add(CreateInspector());
+			root.Add(DrawProperties());
 			root.Add(new Spacer());
 			
 			Foldout defaultInspector = new(){ text = "Default Inspector", value = false};
@@ -40,7 +40,7 @@ namespace Fsi.Ui
 			return root;
 		}
 
-		protected abstract VisualElement CreateInspector();
+		protected abstract VisualElement DrawProperties();
 
 		public VisualElement CreateTitle(string title, string subtitle)
 		{
