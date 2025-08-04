@@ -81,7 +81,7 @@ namespace Fsi.Ui
 				return c;
 			}
 
-			var pref = $"{GetType().Name}.{category}";
+			string pref = $"{GetType().Name}.{category}";
 			Foldout foldout = UiEditorUtility.CategoryFoldout(category, pref);
 			VisualElement content = new() { style = { unityFontStyleAndWeight = FontStyle.Normal } };
 			root.Add(foldout);
