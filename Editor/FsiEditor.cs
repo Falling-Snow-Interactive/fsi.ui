@@ -3,6 +3,7 @@ using Fsi.Ui.Labels;
 using Fsi.Ui.Spacers;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Fsi.Ui
@@ -30,8 +31,7 @@ namespace Fsi.Ui
 			scriptField.bindingPath = "m_Script";
     
 			root.Add(scriptField);
-			root.Add(DrawProperties());
-			root.Add(new Spacer());
+			root.Add(DrawCategories());
 			
 			Foldout defaultInspector = new(){ text = "Default Inspector", value = false};
 			InspectorElement.FillDefaultInspector(defaultInspector, serializedObject, this);
@@ -40,7 +40,7 @@ namespace Fsi.Ui
 			return root;
 		}
 
-		protected abstract VisualElement DrawProperties();
+		protected abstract VisualElement DrawCategories();
 
 		public VisualElement CreateTitle(string title, string subtitle)
 		{
@@ -78,20 +78,16 @@ namespace Fsi.Ui
 				return c;
 			}
 
-			VisualElement newCategory = new();
+			var pref = $"{GetType().Name}.{category}";
+			Foldout foldout = UiEditorUtility.CategoryFoldout(category, pref);
+			VisualElement content = new() { style = { unityFontStyleAndWeight = FontStyle.Normal } };
+			root.Add(foldout);
+			root.Add(new Spacer());
 
-			if (categories.Count > 0)
-			{
-				newCategory.Add(new Spacer());
-			}
+			foldout.Add(content);
 
-			Label label = LabelUtility.Category(category);
-			newCategory.Add(label);
-
-			root.Add(newCategory);
-			
-			categories.Add(category, newCategory);
-			return newCategory;
+			categories.Add(category, content);
+			return content;
 		}
 	}
 }
