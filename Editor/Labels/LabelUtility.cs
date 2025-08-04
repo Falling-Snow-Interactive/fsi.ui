@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Fsi.Ui.Labels
@@ -6,7 +7,7 @@ namespace Fsi.Ui.Labels
 	{
 		private const float TitleSize = 24f;
 		private const float SectionSize = 20f;
-		private const float CategorySize = 16f;
+		private const float CategorySize = 14f;
 
 		// public Header(float size, string text) : base(text)
 		// {
@@ -36,7 +37,11 @@ namespace Fsi.Ui.Labels
 		{
 			Label label = new(text)
 			              {
-				              style = { fontSize = CategorySize }
+				              style =
+				              {
+					              fontSize = CategorySize,
+					              unityFontStyleAndWeight = FontStyle.Bold
+				              }
 			              };
 			return label;
 		}
