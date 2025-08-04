@@ -10,10 +10,14 @@ namespace Fsi.Ui
 	public abstract class FsiInspector : Editor
 	{
 		private Dictionary<string, VisualElement> categories = new();
+
+		private VisualElement root;
 		
 		public override VisualElement CreateInspectorGUI()
 		{
-			VisualElement root = new();
+			categories = new Dictionary<string, VisualElement>();
+			
+			root = new VisualElement();
 			
 			// Create a SerializedObject to hold the script reference
 			var scriptSo = new SerializedObject(target);
@@ -27,6 +31,10 @@ namespace Fsi.Ui
     
 			root.Add(scriptField);
 			root.Add(CreateInspector());
+			
+			Foldout defaultInspector = new(){ text = "Default Inspector", value = false};
+			InspectorElement.FillDefaultInspector(defaultInspector, serializedObject, this);
+			root.Add(defaultInspector);
 
 			return root;
 		}
@@ -64,15 +72,17 @@ namespace Fsi.Ui
 
 		private VisualElement GetOrCreateCategory(string category)
 		{
-			if (categories.TryGetValue(category, out VisualElement properties))
+			if (categories.TryGetValue(category, out VisualElement c))
 			{
-				return properties;
+				return c;
 			}
 
 			VisualElement newCategory = new();
 
 			Label label = LabelUtility.Category(category);
 			newCategory.Add(label);
+
+			root.Add(newCategory);
 			
 			categories.Add(category, newCategory);
 			return newCategory;
