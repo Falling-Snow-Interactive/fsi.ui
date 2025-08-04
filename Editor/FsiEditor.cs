@@ -50,7 +50,7 @@ namespace Fsi.Ui
 			VisualElement root = new();
 			
 			Label titleLabel = LabelUtility.Title(title);
-			Label subtitleLabel = new Label(subtitle);
+			Label subtitleLabel = new(subtitle);
 
 			root.Add(titleLabel);
 			root.Add(subtitleLabel);
