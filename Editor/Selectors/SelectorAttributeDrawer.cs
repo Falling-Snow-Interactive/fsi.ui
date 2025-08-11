@@ -10,7 +10,7 @@ namespace Fsi.Ui.Selectors
     [CustomPropertyDrawer(typeof(SelectorAttribute))]
     public abstract class SelectorAttributeDrawer<T> : PropertyDrawer where T : Object, ISelectorData
     {
-        public abstract List<T> GetData();
+        protected abstract List<T> GetData();
         
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
@@ -32,7 +32,7 @@ namespace Fsi.Ui.Selectors
                                               };
             objectField.SetEnabled(false); // Optional: make it read-only
 			
-            DropdownField dropdown = new(names, selectedIndex);
+            DropdownField dropdown = new(names, selectedIndex){label = property.displayName};
             dropdown.RegisterValueChangedCallback(evt =>
                                                   {
                                                       var newSelected = data[names.IndexOf(evt.newValue)];
