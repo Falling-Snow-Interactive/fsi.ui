@@ -3,10 +3,10 @@ using UnityEngine.UIElements;
 
 namespace Fsi.Ui.Labels
 {
-	public static class LabelUtility // : Label
+	public static class LabelUtility
 	{
-		private const float TitleSize = 24f;
-		private const float SectionSize = 20f;
+		private const float TitleSize = 20f;
+		private const float SectionSize = 16f;
 		private const float CategorySize = 12f;
 
 		public static Label Title(string text)
