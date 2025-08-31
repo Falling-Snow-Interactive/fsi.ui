@@ -10,10 +10,12 @@ namespace Fsi.Ui.Buttons
 		[SerializeField]
 		private SelectionState debugState;
 
+		#if UNITY_EDITOR
 		protected override void OnValidate()
 		{
 			if (!Application.isPlaying) DoStateTransition(debugState, true);
 		}
+		#endif
 
 		// State Events
 		public event Action OnNormal;

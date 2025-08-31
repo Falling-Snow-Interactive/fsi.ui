@@ -39,10 +39,12 @@ namespace Fsi.Ui.Buttons
 			SetHighlight(false);
 		}
 
+		#if UNITY_EDITOR
 		protected override void OnValidate()
 		{
 			transition = Transition.None;
 		}
+		#endif
 
 		// Events
 		public event Action<FsiSelectionState> OnEnteredState;

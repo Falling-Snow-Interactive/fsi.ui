@@ -27,15 +27,4 @@ namespace Fsi.Ui.Spacers
 		public SpacerOrientation Orientation { get; }
 		public SpacerColor Color { get; }
 	}
-
-	[CustomPropertyDrawer(typeof(SpacerAttribute))]
-	public class SpacerAttributeDrawer : DecoratorDrawer
-	{
-		public override VisualElement CreatePropertyGUI()
-		{
-			var attr = (SpacerAttribute)attribute;
-			var spacer = new Spacer(attr.Size, attr.Orientation, attr.Color);
-			return spacer;
-		}
-	}
 }

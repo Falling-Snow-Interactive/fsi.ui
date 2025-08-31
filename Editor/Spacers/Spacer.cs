@@ -108,19 +108,4 @@ namespace Fsi.Ui.Spacers
 		public static Spacer BlankWide => new(DefaultSize, SpacerOrientation.Horizontal, SpacerColor.Blank);
 		public static Spacer BlankTall => new(DefaultSize, SpacerOrientation.Vertical, SpacerColor.Blank);
 	}
-
-	public enum SpacerOrientation
-	{
-		Horizontal = 0,
-		Vertical = 1,
-		Fill = 3
-	}
-
-	public enum SpacerColor
-	{
-		Normal = 0,
-		Light = 1,
-		Dark = 2,
-		Blank = 3
-	}
 }
