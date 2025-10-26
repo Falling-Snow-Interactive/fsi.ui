@@ -1,13 +1,19 @@
-using Fsi.Ui.Entries;
-using UnityEngine;
 
 namespace Fsi.Ui.Widgets
 {
-    public abstract class WidgetUi<T> : MonoBehaviour where T : IWidget
+    public abstract class WidgetEntry<T> : Widget, IWidgetEntry<T> where T : IWidgetEntryData
     {
-        protected T Value { get; private set; }
+        public T Value { get; private set; }
 
         protected void OnEnable()
+        {
+            if (Value != null)
+            {
+                Value.Updated += Refresh;
+            }
+        }
+
+        protected void OnDisable()
         {
             if (Value != null)
             {

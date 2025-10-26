@@ -17,6 +17,7 @@ namespace Fsi.Ui.Selectors
             VisualElement root = new();
             List<T> data = GetData(); 
             List<string> names = data.Select(d => d.Name).ToList();
+            names.Insert(0, "None");
 
             int selectedIndex = 0;
             if (property.objectReferenceValue != null
@@ -35,8 +36,17 @@ namespace Fsi.Ui.Selectors
             DropdownField dropdown = new(names, selectedIndex){label = property.displayName};
             dropdown.RegisterValueChangedCallback(evt =>
                                                   {
-                                                      var newSelected = data[names.IndexOf(evt.newValue)];
-                                                      property.objectReferenceValue = newSelected;
+                                                      int index = names.IndexOf(evt.newValue) - 1;
+                                                      if (index < 0)
+                                                      {
+                                                          property.objectReferenceValue = null;
+                                                          property.serializedObject.ApplyModifiedProperties();
+                                                      }
+                                                      else
+                                                      {
+                                                          T newSelected = data[index];
+                                                          property.objectReferenceValue = newSelected;
+                                                      }
                                                       property.serializedObject.ApplyModifiedProperties();
                                                   });
             root.Add(dropdown);
