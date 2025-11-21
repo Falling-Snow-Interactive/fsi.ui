@@ -23,6 +23,7 @@ namespace Fsi.Ui.Spacers
 					                     backgroundColor = NormalColor,
 
 					                     height = DefaultSize,
+					                     width = Length.Auto(),
 
 					                     marginTop = DefaultMargin,
 					                     marginBottom = DefaultMargin,
@@ -45,7 +46,7 @@ namespace Fsi.Ui.Spacers
 			#endif
 		}
 
-		public Spacer(float size,
+		public Spacer(float size = DefaultSize,
 		              SpacerOrientation orientation = SpacerOrientation.Horizontal,
 		              SpacerColor color = SpacerColor.Normal)
 		{
@@ -63,6 +64,9 @@ namespace Fsi.Ui.Spacers
 				                     style =
 				                     {
 					                     backgroundColor = c,
+					                     
+					                     height = orientation == SpacerOrientation.Horizontal ? Length.Auto() : size,
+					                     width = orientation == SpacerOrientation.Vertical ? Length.Auto() : size,
 
 					                     marginTop = DefaultMargin,
 					                     marginBottom = DefaultMargin,
@@ -77,23 +81,12 @@ namespace Fsi.Ui.Spacers
 					                     borderBottomLeftRadius = DefaultBorderRadius,
 					                     borderBottomRightRadius = DefaultBorderRadius,
 					                     borderTopLeftRadius = DefaultBorderRadius,
-					                     borderTopRightRadius = DefaultBorderRadius
+					                     borderTopRightRadius = DefaultBorderRadius,
+					                     
+					                     flexGrow = 1,
+					                     flexShrink = 1,
 				                     }
 			                     };
-
-			switch (orientation)
-			{
-				case SpacerOrientation.Horizontal:
-					root.style.height = size;
-					break;
-				case SpacerOrientation.Vertical:
-					root.style.width = size;
-					break;
-				case SpacerOrientation.Fill:
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(orientation), orientation, null);
-			}
 
 			Add(root);
 			#endif
