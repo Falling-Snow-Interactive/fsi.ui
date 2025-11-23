@@ -1,5 +1,5 @@
 using System;
-using Fsi.Gameplay;
+using Fsi.General;
 using Fsi.Ui.Input.Prompts;
 using UnityEngine;
 using UnityEngine.InputSystem;

@@ -14,9 +14,10 @@
   },
   "hideInEditor": false,
   "dependencies": {
-    "com.unity.inputsystem": "1.11.2",
-    "com.unity.localization": "1.5.4",
+    "com.fallingsnowinteractive.general": "0.0.1",
+    "com.fallingsnowinteractive.gameplay": "0.1.1",
     "com.fallingsnowinteractive.settings": "0.0.1",
-    "com.fallingsnowinteractive.gameplay": "0.1.1"
+    "com.unity.inputsystem": "1.11.2",
+    "com.unity.localization": "1.5.4"
   }
 }
