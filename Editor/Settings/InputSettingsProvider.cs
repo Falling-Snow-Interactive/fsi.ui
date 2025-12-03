@@ -1,9 +1,9 @@
 using Fsi.Ui.Input.Settings;
 using Fsi.Ui.Labels;
-using Fsi.Ui.Spacers;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
+using Spacer = Fsi.Ui.Dividers.Spacer;
 
 namespace Fsi.Ui.Settings
 {
@@ -35,7 +35,7 @@ namespace Fsi.Ui.Settings
 
 			#region Input Schemes
 
-			scrollView.Add(Spacer.Wide);
+			scrollView.Add(new Spacer());
 			scrollView.Add(CreateInputCategory());
 
 			#endregion
