@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Fsi.Ui
 {
-    [CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
+    // [CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
     public class ReadOnlyAttributeDrawer : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)

@@ -12,7 +12,7 @@ namespace Fsi.Ui.Dividers
 	{
 		private const float Shade = 0.19f;
 		private const float DefaultSize = 4f;
-		private Color DefaultColor => new(Shade, Shade, Shade, 1f);
+		private Color DefaultColor => Color.red; // new(Shade, Shade, Shade, 1f);
 		
 		public float Size { get; }
 		public Color Color { get; }

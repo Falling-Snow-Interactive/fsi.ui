@@ -14,7 +14,10 @@ namespace Fsi.Ui.Dividers
 				                       style =
 				                       {
 					                       width = new StyleLength(StyleKeyword.Auto),
-					                       height = attr.Size,
+					                       height = 5,
+					                       
+					                       flexGrow = 0,
+					                       flexShrink = 0,
 					                       
 					                       backgroundColor = attr.Color,
 					                       
@@ -24,7 +27,7 @@ namespace Fsi.Ui.Dividers
 					                       marginLeft = 5,
 				                       }
 			                       };
-			return spacer;
+			return spacer; // new Divider();
 		}
 	}
 }
