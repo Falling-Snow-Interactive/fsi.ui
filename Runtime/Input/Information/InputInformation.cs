@@ -38,7 +38,7 @@ namespace Fsi.Ui.Input.Information
 
 		[SerializeField]
 		private Sprite other;
-		public override InputActionReference Type => input;
+		public override InputActionReference ID => input;
 		public string Name => locName.GetLocalizedString();
 		public string Description => locDescription.GetLocalizedString();
 

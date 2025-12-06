@@ -16,7 +16,7 @@ namespace Fsi.Ui.Input.Settings.SchemeInformations
 		[FormerlySerializedAs("input")]
 		[SerializeField]
 		private PromptType prompts;
-		public override string Type => scheme;
+		public override string ID => scheme;
 		public PromptType Prompts => prompts;
 	}
 }

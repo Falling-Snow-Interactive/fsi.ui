@@ -13,7 +13,7 @@ namespace Fsi.Ui.Input.Prompts.Information
 
 		[SerializeField]
 		private LocalizedString locName;
-		public override PromptType Type => prompt;
+		public override PromptType ID => prompt;
 		public string Name => locName.IsEmpty ? "no_loc" : locName.GetLocalizedString();
 	}
 }
