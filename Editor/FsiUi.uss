@@ -8,17 +8,21 @@
     -unity-font-style: italic;
 }
 
+.h0 {
+    font-size: 16px;
+    -unity-font-style: bold;
+}
+
 .h1 {
-    font-size: 20px;
+    font-size: 14px;
+    -unity-font-style: bold;
 }
 
 .h2 {
-    font-size: 16px;
-}
-
-.h3 {
-    font-size: 14px;
+    font-size: 12px;
+    -unity-font-style: bold;
 }
 
 .body {
+    font-size: 12px;
 }

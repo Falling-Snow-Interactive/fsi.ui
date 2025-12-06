@@ -2,14 +2,13 @@
     "name": "Fsi.Ui.Runtime",
     "rootNamespace": "Fsi.Ui",
     "references": [
-        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:28baa350ed5a94df3a9f583a2fa67b25",
         "GUID:eec0964c48f6f4e40bc3ec2257ccf8c5",
         "GUID:343deaaf83e0cee4ca978e7df0b80d21",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
         "GUID:0a0ec71ae2d72451482f5b56a8255ed4",
-        "GUID:b233fa7d6b0de4d70956927d4f1d5623",
         "GUID:6055be8ebefd69e48b49212b09b47b2f",
-        "GUID:2bafac87e7f4b9b418d9448d219b01ab",
-        "GUID:28baa350ed5a94df3a9f583a2fa67b25"
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
