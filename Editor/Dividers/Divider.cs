@@ -15,7 +15,7 @@ namespace Fsi.Ui.Dividers
         public float height = DefaultHeight;
 
         [UxmlAttribute]
-        public Color color = Color.red;
+        public Color color = Color.grey;
 
         public Divider()
         {
