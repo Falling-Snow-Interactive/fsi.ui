@@ -3,16 +3,14 @@ using UnityEngine;
 
 namespace Fsi.Ui.Headers
 {
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = true, AllowMultiple = true)]
     public class FsiHeaderAttribute : PropertyAttribute
     {
         public string Text { get; }
-        public int Size { get; }
 
-        public FsiHeaderAttribute(string text, int size = 0)
+        public FsiHeaderAttribute(string text)
         {
             Text = text;
-            Size = size;
         }
     }
 }
