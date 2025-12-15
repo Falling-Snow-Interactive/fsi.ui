@@ -25,17 +25,15 @@
 }
 
 .fsi-property-label {
-    width: 25px; /* override from C# if needed */
+    width: 25px;
     flex-shrink: 1;
     flex-grow: 1;
-    /*min-width: 150px;*/
     margin-right: 2px;
     margin-left: 2px;
     -unity-text-align: middle-left;
 }
 
 .fsi-property-field {
-    /*flex-direction: row;*/
     flex-grow: 1;
     flex-shrink: 0;
 }
